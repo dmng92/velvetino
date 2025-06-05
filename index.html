@@ -6,32 +6,6 @@
   <title>dmng92</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <style>
-
-#puntos-navegacion {
-  display: grid;
-  grid-template-columns: repeat(5, auto);
-  gap: 6px;
-  justify-content: center;
-  margin: 30px 0;
-}
-
-#puntos-navegacion .punto {
-  width: 10px;
-  height: 10px;
-  background-color: #444;
-  transition: background-color 0.3s;
-  cursor: pointer;
-}
-
-#puntos-navegacion .punto:hover {
-  background-color: #ffcc00;
-}
-
-#puntos-navegacion .punto.activo {
-  background-color: #ffcc00;
-}
-
-
 .flecha-navegacion {
   display: none;
   position: fixed;
@@ -272,8 +246,7 @@
     <span>ig</span>
     <a href="https://instagram.com/_nicoantico" target="_blank" rel="noopener noreferrer">@_nicoantico</a>
   </div>
-
-<div id="puntos-navegacion" style="text-align: center; margin: 30px 0;"></div>
+  
 
   <div class="grid" id="galeria">
     <div class="grid-sizer"></div>
@@ -344,29 +317,6 @@
           msnry.reloadItems();
           msnry.layout();
         }
-
-      function generarPuntos() {
-  const contenedor = document.getElementById('puntos-navegacion');
-  contenedor.innerHTML = '';
-  for (let i = 0; i < imagenesBaja.length; i++) {
-    const punto = document.createElement('span');
-    punto.classList.add('punto');
-    if (i === imagenActualIndex) punto.classList.add('activo');
-    punto.addEventListener('click', () => {
-      mostrarLightbox(`imagenesBaja/${imagenesBaja[i]}`, i);
-      actualizarPuntos(i);
-    });
-    contenedor.appendChild(punto);
-  }
-}
-
-function actualizarPuntos(indiceActivo) {
-  const puntos = document.querySelectorAll('#puntos-navegacion .punto');
-  puntos.forEach((punto, index) => {
-    punto.classList.toggle('activo', index === indiceActivo);
-  });
-}
-
       });
   
       // Pre-cargar siguiente página
@@ -385,7 +335,6 @@ function actualizarPuntos(indiceActivo) {
   lightboxImg.src = src;
   lightboxLink.href = imagenesAlta/${imagenesAlta[index]}; // usa alta resolución
   imagenActualIndex = index;
-  actualizarPuntos(index);
   lightbox.classList.add('show');
   lightboxImg.classList.add('fade-in');
   document.body.classList.add('no-scroll');
@@ -458,8 +407,6 @@ function actualizarPuntos(indiceActivo) {
     });
   
     mostrarPagina(0);
-    generarPuntos();
-
     
     document.getElementById('flechaIzquierda').addEventListener('click', () => {
   if (paginaActual > 0) {
@@ -476,7 +423,6 @@ document.getElementById('flechaDerecha').addEventListener('click', () => {
     mostrarPagina(paginaActual + 1);
   } else {
     mostrarPagina(0);
-    generarPuntos();
   }
 });
 
