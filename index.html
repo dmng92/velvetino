@@ -6,6 +6,32 @@
   <title>dmng92</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <style>
+
+#puntos-navegacion {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 6px;
+  justify-content: center;
+  margin: 30px 0;
+}
+
+#puntos-navegacion .punto {
+  width: 10px;
+  height: 10px;
+  background-color: #444;
+  transition: background-color 0.3s;
+  cursor: pointer;
+}
+
+#puntos-navegacion .punto:hover {
+  background-color: #ffcc00;
+}
+
+#puntos-navegacion .punto.activo {
+  background-color: #ffcc00;
+}
+
+
 .flecha-navegacion {
   display: none;
   position: fixed;
@@ -151,6 +177,7 @@
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
 }
+
     footer {
       text-align: center;
       padding: 20px;
@@ -267,7 +294,11 @@
     </div>
     <div class="nav-arrow nav-right" onclick="navegarLightbox(1)"></div>
   </div>
-  <footer></footer>
+  <footer>
+<div id="puntos-navegacion" style="text-align: center; margin: 30px 0;"></div>
+
+
+  </footer>
 
 
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
@@ -296,7 +327,7 @@
         const div = document.createElement('div');
         div.className = 'grid-item';
         const img = document.createElement('img');
-        img.src = imagenesBaja/${imagenesBaja[i]};
+        img.src = `imagenesBaja/${imagenesBaja[i]}`;
         img.loading = 'lazy';
         img.alt = imagenesAlta[i];
         img.addEventListener('click', () => mostrarLightbox(img.src, i));
@@ -323,18 +354,42 @@
       const siguienteInicio = (pagina + 1) * porPagina;
       for (let i = siguienteInicio; i < siguienteInicio + porPagina && i < imagenesBaja.length; i++) {
         const preloadImg = new Image();
-        preloadImg.src = imagenesBaja/${imagenesBaja[i]};
+        preloadImg.src = `imagenesBaja/${imagenesBaja[i]}`;
       }
   
       paginaActual = pagina;
     }
   
+function generarPuntos() {
+  const contenedor = document.getElementById('puntos-navegacion');
+  contenedor.innerHTML = '';
+  for (let i = 0; i < imagenesBaja.length; i++) {
+    const punto = document.createElement('span');
+    punto.classList.add('punto');
+    if (i === imagenActualIndex) punto.classList.add('activo');
+    punto.addEventListener('click', () => {
+      mostrarLightbox(`imagenesBaja/${imagenesBaja[i]}`, i);
+      actualizarPuntos(i);
+    });
+    contenedor.appendChild(punto);
+  }
+}
+
+function actualizarPuntos(indiceActivo) {
+  const puntos = document.querySelectorAll('#puntos-navegacion .punto');
+  puntos.forEach((punto, index) => {
+    punto.classList.toggle('activo', index === indiceActivo);
+  });
+}
+
+
     function mostrarLightbox(src, index) {
   lightboxImg.classList.remove('fade-in');
   void lightboxImg.offsetWidth;
   lightboxImg.src = src;
-  lightboxLink.href = imagenesAlta/${imagenesAlta[index]}; // usa alta resolución
+  lightboxLink.href = `imagenesAlta/${imagenesAlta[index]}`; // usa alta resolución
   imagenActualIndex = index;
+  actualizarPuntos(index);
   lightbox.classList.add('show');
   lightboxImg.classList.add('fade-in');
   document.body.classList.add('no-scroll');
@@ -357,13 +412,12 @@
   imagenActualIndex += direccion;
   if (imagenActualIndex < 0) imagenActualIndex = 0;
   if (imagenActualIndex >= imagenesBaja.length) imagenActualIndex = imagenesBaja.length - 1;
-  const nuevaSrc = imagenesBaja/${imagenesBaja[imagenActualIndex]};
+  const nuevaSrc = `imagenesBaja/${imagenesBaja[imagenActualIndex]}`;
   lightboxImg.src = nuevaSrc;
-  lightboxLink.href = imagenesAlta/${imagenesAlta[imagenActualIndex]}; // usa alta resolución
+  lightboxLink.href = `imagenesAlta/${imagenesAlta[imagenActualIndex]}`; // usa alta resolución
 }
 
   
-
     // Navegación por arrastre horizontal
     let startX = 0;
     galeria.addEventListener('touchstart', e => {
@@ -408,6 +462,7 @@
     });
   
     mostrarPagina(0);
+    generarPuntos();
     
     document.getElementById('flechaIzquierda').addEventListener('click', () => {
   if (paginaActual > 0) {
@@ -424,6 +479,7 @@ document.getElementById('flechaDerecha').addEventListener('click', () => {
     mostrarPagina(paginaActual + 1);
   } else {
     mostrarPagina(0);
+    generarPuntos();
   }
 });
 
