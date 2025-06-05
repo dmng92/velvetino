@@ -7,12 +7,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <style>
 
+#puntos-navegacion {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  gap: 6px;
+  justify-content: center;
+  margin: 30px 0;
+}
+
 #puntos-navegacion .punto {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  margin: 4px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
   background-color: #444;
   transition: background-color 0.3s;
   cursor: pointer;
@@ -24,6 +29,8 @@
 
 #puntos-navegacion .punto.activo {
   background-color: #ffcc00;
+}
+
 }
 
 .flecha-navegacion {
