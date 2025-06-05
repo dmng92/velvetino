@@ -9,28 +9,29 @@
 
 #puntos-navegacion {
   display: grid;
-  grid-template-columns: repeat(5, auto);
-  gap: 6px;
+  grid-template-columns: repeat(4, auto); /* 4 bloques por fila */
+  gap: 16px; /* espacio entre bloques */
   justify-content: center;
-  margin: 30px 0;
+  margin-bottom: 20px;
 }
 
-#puntos-navegacion .punto {
-  width: 10px;
-  height: 10px;
-  background-color: #444;
-  transition: background-color 0.3s;
+.bloque-puntos {
+  display: grid;
+  grid-template-columns: repeat(5, 12px); /* 5 cuadrados por fila */
+  grid-auto-rows: 12px;
+  gap: 4px;
+}
+
+.punto {
+  width: 12px;
+  height: 12px;
+  background-color: #999;
   cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-#puntos-navegacion .punto:hover {
+.punto:hover {
   background-color: #ffcc00;
-}
-
-#puntos-navegacion .punto.activo {
-  background-color: #ffcc00;
-}
-
 }
 
 .flecha-navegacion {
@@ -275,6 +276,11 @@
     <a href="https://instagram.com/_nicoantico" target="_blank" rel="noopener noreferrer">@_nicoantico</a>
   </div>
   
+<div id="puntos-navegacion" style="text-align: center; margin: 30px 0;"></div>
+  <div class="bloque-puntos">
+ <!-- 25 cuadrados (5x5) -->
+    <div class="punto"></div>
+
 
   <div class="grid" id="galeria">
     <div class="grid-sizer"></div>
@@ -296,7 +302,6 @@
     <div class="nav-arrow nav-right" onclick="navegarLightbox(1)"></div>
   </div>
   <footer>
-<div id="puntos-navegacion" style="text-align: center; margin: 30px 0;"></div>
 
 
   </footer>
@@ -361,27 +366,32 @@
       paginaActual = pagina;
     }
   
-function generarPuntos() {
-  const contenedor = document.getElementById('puntos-navegacion');
-  contenedor.innerHTML = '';
-  for (let i = 0; i < imagenesBaja.length; i++) {
-    const punto = document.createElement('span');
-    punto.classList.add('punto');
-    if (i === imagenActualIndex) punto.classList.add('activo');
-    punto.addEventListener('click', () => {
-      mostrarLightbox(`imagenesBaja/${imagenesBaja[i]}`, i);
-      actualizarPuntos(i);
-    });
-    contenedor.appendChild(punto);
+function generarPuntos(totalFotos) {
+  const puntosPorBloque = 25;
+  const puntosPorFila = 5;
+  const puntosNavegacion = document.getElementById("puntos-navegacion");
+  puntosNavegacion.innerHTML = "";
+
+  for (let i = 0; i < totalFotos; i += puntosPorBloque) {
+    const bloque = document.createElement("div");
+    bloque.classList.add("bloque-puntos");
+
+    for (let j = 0; j < puntosPorBloque && i + j < totalFotos; j++) {
+      const punto = document.createElement("div");
+      punto.classList.add("punto");
+      punto.dataset.index = i + j;
+
+      punto.addEventListener("click", () => {
+        mostrarLightbox(i + j);
+      });
+
+      bloque.appendChild(punto);
+    }
+
+    puntosNavegacion.appendChild(bloque);
   }
 }
 
-function actualizarPuntos(indiceActivo) {
-  const puntos = document.querySelectorAll('#puntos-navegacion .punto');
-  puntos.forEach((punto, index) => {
-    punto.classList.toggle('activo', index === indiceActivo);
-  });
-}
 
 
     function mostrarLightbox(src, index) {
