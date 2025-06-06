@@ -159,7 +159,7 @@
   margin: 0 auto;
   max-width: 1200px;
   opacity: 0;
-  transition: opacity 5s ease;
+  transition: opacity 2.5s ease;
 }
     .grid.visible {
   opacity: 1;
@@ -325,6 +325,7 @@
     function mostrarPagina(pagina) {
         galeria.classList.remove('visible');
         galeria.innerHTML = '';
+        
       galeria.innerHTML = '<div class="grid-sizer"></div>';
       const inicio = pagina * porPagina;
       const fin = Math.min(inicio + porPagina, imagenesBaja.length);
