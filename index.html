@@ -323,27 +323,45 @@
   <script src="imagenesAlta.js"></script>
    
 <script>
-  function applyFadeIn() {
-    const images = document.querySelectorAll('.fade-in');
-    let loadedCount = 0;
+function applyFadeIn() {
+  const images = document.querySelectorAll('.fade-in');
 
-    images.forEach(img => {
-      if (img.complete) {
-        // Ya cargada
-        img.classList.add('visible');
-      } else {
-        img.addEventListener('load', () => {
-          loadedCount++;
-          if (loadedCount === images.length) {
-            images.forEach(img => img.classList.add('visible'));
-          }
-        });
-      }
-    });
+  images.forEach(img => {
+    img.classList.remove('visible'); // Reinicia estado por si venís de otra página
+  });
+
+  let allLoaded = true;
+
+  images.forEach(img => {
+    if (!img.complete) {
+      allLoaded = false;
+      img.addEventListener('load', checkAllLoaded, { once: true });
+    }
+  });
+
+  if (allLoaded) {
+    triggerFadeIn();
   }
 
-  // Ejecutar cuando el DOM esté listo
-  document.addEventListener('DOMContentLoaded', applyFadeIn);
+  function checkAllLoaded() {
+    const remaining = Array.from(images).some(img => !img.complete);
+    if (!remaining) {
+      triggerFadeIn();
+    }
+  }
+
+  function triggerFadeIn() {
+    // Esperar al próximo repaint para asegurar que el layout esté completo
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        images.forEach(img => {
+          img.classList.add('visible');
+        });
+      });
+    });
+  }
+}
+
 </script>
 
 
