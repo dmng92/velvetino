@@ -323,6 +323,8 @@
     let msnry;
   
     function mostrarPagina(pagina) {
+        galeria.classList.remove('visible');
+        galeria.innerHTML = '';
       galeria.innerHTML = '<div class="grid-sizer"></div>';
       const inicio = pagina * porPagina;
       const fin = Math.min(inicio + porPagina, imagenesBaja.length);
