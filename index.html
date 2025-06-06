@@ -351,14 +351,6 @@
         }
       });
   
-      // Pre-cargar siguiente página
-      const siguienteInicio = (pagina + 1) * porPagina;
-      for (let i = siguienteInicio; i < siguienteInicio + porPagina && i < imagenesBaja.length; i++) {
-        const preloadImg = new Image();
-        preloadImg.src = `imagenesBaja/${imagenesBaja[i]}`;
-      }
-  
-      paginaActual = pagina;
     }
   
 function generarPuntos() {
