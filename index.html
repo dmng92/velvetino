@@ -296,7 +296,7 @@
 
   <div class="lightbox" id="lightbox">
     <div class="nav-arrow nav-left" onclick="navegarLightbox(-1)"></div>
-    <img src="" alt="Imagen ampliada" id="lightbox-img">
+    <img src="" class="fade-in" alt="Imagen ampliada" id="lightbox-img">
     <div class="controls">
       <a id="lightbox-link" class="link-btn" href="#" target="_blank">
         <span>🔗</span> Fullsize
@@ -322,6 +322,31 @@
   <script src="imagenesBaja.js"></script>
   <script src="imagenesAlta.js"></script>
    
+<script>
+  function applyFadeIn() {
+    const images = document.querySelectorAll('.fade-in');
+    let loadedCount = 0;
+
+    images.forEach(img => {
+      if (img.complete) {
+        // Ya cargada
+        img.classList.add('visible');
+      } else {
+        img.addEventListener('load', () => {
+          loadedCount++;
+          if (loadedCount === images.length) {
+            images.forEach(img => img.classList.add('visible'));
+          }
+        });
+      }
+    });
+  }
+
+  // Ejecutar cuando el DOM esté listo
+  document.addEventListener('DOMContentLoaded', applyFadeIn);
+</script>
+
+
   <script>
     const galeria = document.getElementById('galeria');
     const lightbox = document.getElementById('lightbox');
