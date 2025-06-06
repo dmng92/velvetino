@@ -158,12 +158,8 @@
   position: relative;
   margin: 0 auto;
   max-width: 1200px;
-  opacity: 0;
-  transition: opacity 2.5s ease;
 }
-    .grid.visible {
-  opacity: 1;
-}
+
     .grid-sizer,
 .grid-item {
   width: calc(var(--img-size) );
@@ -322,51 +318,38 @@
     let imagenActualIndex = 0;
     let msnry;
   
-function mostrarPagina(pagina) {
-  // Ocultar galería
-  galeria.classList.remove('visible');
-  galeria.innerHTML = '<div class="grid-sizer"></div>';
-
-  const inicio = pagina * porPagina;
-  const fin = Math.min(inicio + porPagina, imagenesBaja.length);
-  const fragment = document.createDocumentFragment();
-
-  for (let i = inicio; i < fin; i++) {
-    const div = document.createElement('div');
-    div.className = 'grid-item';
-    const img = document.createElement('img');
-    img.src = `imagenesBaja/${imagenesBaja[i]}`;
-    img.loading = 'lazy';
-    img.alt = imagenesAlta[i];
-    img.addEventListener('click', () => mostrarLightbox(img.src, i));
-    div.appendChild(img);
-    fragment.appendChild(div);
-  }
-
-  galeria.appendChild(fragment);
-
-  // Aguardar carga de imágenes
-  imagesLoaded(galeria, () => {
-    // Iniciar o refrescar Masonry
-    if (!msnry) {
-      msnry = new Masonry(galeria, {
-        itemSelector: '.grid-item',
-        columnWidth: '.grid-sizer',
-        percentPosition: true
+    function mostrarPagina(pagina) {
+      galeria.innerHTML = '<div class="grid-sizer"></div>';
+      const inicio = pagina * porPagina;
+      const fin = Math.min(inicio + porPagina, imagenesBaja.length);
+      const fragment = document.createDocumentFragment();
+  
+      for (let i = inicio; i < fin; i++) {
+        const div = document.createElement('div');
+        div.className = 'grid-item';
+        const img = document.createElement('img');
+        img.src = `imagenesBaja/${imagenesBaja[i]}`;
+        img.loading = 'lazy';
+        img.alt = imagenesAlta[i];
+        img.addEventListener('click', () => mostrarLightbox(img.src, i));
+        div.appendChild(img);
+        fragment.appendChild(div);
+      }
+  
+      galeria.appendChild(fragment);
+  
+      imagesLoaded(galeria, () => {
+        if (!msnry) {
+          msnry = new Masonry(galeria, {
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer',
+            percentPosition: true
+          });
+        } else {
+          msnry.reloadItems();
+          msnry.layout();
+        }
       });
-    } else {
-      msnry.reloadItems();
-      msnry.layout();
-    }
-
-    // Usar dos frames para garantizar reflujo antes de mostrar
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        galeria.classList.add('visible');
-      });
-    });
-  });
-}
   
       // Pre-cargar siguiente página
       const siguienteInicio = (pagina + 1) * porPagina;
@@ -376,7 +359,7 @@ function mostrarPagina(pagina) {
       }
   
       paginaActual = pagina;
-    
+    }
   
 function generarPuntos() {
   const contenedor = document.getElementById('puntos-navegacion');
@@ -518,7 +501,6 @@ window.addEventListener('scroll', actualizarFlechas);
 // Llamar también al cargar la página
 window.addEventListener('load', actualizarFlechas);
 
-mostrarPagina(0);
 
   </script>
 
