@@ -7,8 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
   <style>
 
-
-
 #puntos-navegacion {
   display: grid;
   grid-template-columns: repeat(25, auto);
@@ -268,19 +266,6 @@
     .nav-right {
       right: 0;
     }
-
-.grid.fade {
-  opacity: 0;
-  transform: scale(0.98);
-  transition: opacity 1s ease-out, transform 1s ease-out;
-}
-
-.grid.visible {
-  opacity: 1;
-  transform: scale(1);
-}
-
-
   </style>
 </head>
 <body>
@@ -296,7 +281,7 @@
 
   <div class="lightbox" id="lightbox">
     <div class="nav-arrow nav-left" onclick="navegarLightbox(-1)"></div>
-    <img src="" class="fade-in" alt="Imagen ampliada" id="lightbox-img">
+    <img src="" alt="Imagen ampliada" id="lightbox-img">
     <div class="controls">
       <a id="lightbox-link" class="link-btn" href="#" target="_blank">
         <span>🔗</span> Fullsize
@@ -322,49 +307,6 @@
   <script src="imagenesBaja.js"></script>
   <script src="imagenesAlta.js"></script>
    
-<script>
-function applyFadeIn() {
-  const images = document.querySelectorAll('.fade-in');
-
-  images.forEach(img => {
-    img.classList.remove('visible'); // Reinicia estado por si venís de otra página
-  });
-
-  let allLoaded = true;
-
-  images.forEach(img => {
-    if (!img.complete) {
-      allLoaded = false;
-      img.addEventListener('load', checkAllLoaded, { once: true });
-    }
-  });
-
-  if (allLoaded) {
-    triggerFadeIn();
-  }
-
-  function checkAllLoaded() {
-    const remaining = Array.from(images).some(img => !img.complete);
-    if (!remaining) {
-      triggerFadeIn();
-    }
-  }
-
-  function triggerFadeIn() {
-    // Esperar al próximo repaint para asegurar que el layout esté completo
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        images.forEach(img => {
-          img.classList.add('visible');
-        });
-      });
-    });
-  }
-}
-
-</script>
-
-
   <script>
     const galeria = document.getElementById('galeria');
     const lightbox = document.getElementById('lightbox');
@@ -377,50 +319,38 @@ function applyFadeIn() {
     let msnry;
   
     function mostrarPagina(pagina) {
-  // Inicia efecto de desaparición
-  galeria.classList.remove('visible');
-  galeria.classList.add('fade');
-
-  setTimeout(() => {
-    galeria.innerHTML = '<div class="grid-sizer"></div>';
-    const inicio = pagina * porPagina;
-    const fin = Math.min(inicio + porPagina, imagenesBaja.length);
-    const fragment = document.createDocumentFragment();
-
-    for (let i = inicio; i < fin; i++) {
-      const div = document.createElement('div');
-      div.className = 'grid-item';
-      const img = document.createElement('img');
-      img.src = `imagenesBaja/${imagenesBaja[i]}`;
-      img.loading = 'lazy';
-      img.alt = imagenesAlta[i];
-      img.addEventListener('click', () => mostrarLightbox(img.src, i));
-      div.appendChild(img);
-      fragment.appendChild(div);
-    }
-
-    galeria.appendChild(fragment);
-
-    imagesLoaded(galeria, () => {
-      if (!msnry) {
-        msnry = new Masonry(galeria, {
-          itemSelector: '.grid-item',
-          columnWidth: '.grid-sizer',
-          percentPosition: true
-        });
-      } else {
-        msnry.reloadItems();
-        msnry.layout();
+      galeria.innerHTML = '<div class="grid-sizer"></div>';
+      const inicio = pagina * porPagina;
+      const fin = Math.min(inicio + porPagina, imagenesBaja.length);
+      const fragment = document.createDocumentFragment();
+  
+      for (let i = inicio; i < fin; i++) {
+        const div = document.createElement('div');
+        div.className = 'grid-item';
+        const img = document.createElement('img');
+        img.src = `imagenesBaja/${imagenesBaja[i]}`;
+        img.loading = 'lazy';
+        img.alt = imagenesAlta[i];
+        img.addEventListener('click', () => mostrarLightbox(img.src, i));
+        div.appendChild(img);
+        fragment.appendChild(div);
       }
-
-      // Aplica efecto de aparición
-      galeria.classList.add('visible');
-    });
-
-    paginaActual = pagina;
-  }, 100); // Breve retardo para permitir transición de salida
-}
-
+  
+      galeria.appendChild(fragment);
+  
+      imagesLoaded(galeria, () => {
+        if (!msnry) {
+          msnry = new Masonry(galeria, {
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer',
+            percentPosition: true
+          });
+        } else {
+          msnry.reloadItems();
+          msnry.layout();
+        }
+      });
+    }
   
 function generarPuntos() {
   const contenedor = document.getElementById('puntos-navegacion');
