@@ -158,8 +158,12 @@
   position: relative;
   margin: 0 auto;
   max-width: 1200px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
 }
-
+    .grid.visible {
+  opacity: 1;
+}
     .grid-sizer,
 .grid-item {
   width: calc(var(--img-size) );
@@ -338,18 +342,22 @@
   
       galeria.appendChild(fragment);
   
-      imagesLoaded(galeria, () => {
-        if (!msnry) {
-          msnry = new Masonry(galeria, {
-            itemSelector: '.grid-item',
-            columnWidth: '.grid-sizer',
-            percentPosition: true
-          });
-        } else {
-          msnry.reloadItems();
-          msnry.layout();
-        }
-      });
+    imagesLoaded(galeria, () => {
+  if (!msnry) {
+    msnry = new Masonry(galeria, {
+      itemSelector: '.grid-item',
+      columnWidth: '.grid-sizer',
+      percentPosition: true
+    });
+  } else {
+    msnry.reloadItems();
+    msnry.layout();
+  }
+
+  // Aparecer galería con animación
+  grid.classList.add('visible');
+});
+
   
       // Pre-cargar siguiente página
       const siguienteInicio = (pagina + 1) * porPagina;
