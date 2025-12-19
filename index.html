@@ -7,8 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    /* Ajustamos el ancho para que quepan dos columnas de unos 100px aprox */
-    --thumb-width: 340px; 
+    /* Ajusta aquí el ancho del panel de miniaturas */
+    --thumb-width: 280px; 
   }
 
   html, body {
@@ -23,110 +23,86 @@
   h1 {
     text-align: left;
     margin: 0;
-    padding: 0;
-    font-size: 8em;
+    padding: 10px 20px;
+    font-size: 6em; /* Reducido un poco para que no empuje todo hacia abajo */
     color: #ffcc00;
     opacity: 0.5;
     transition: opacity 0.3s;
   }
 
-  h1:hover {
-    opacity: 1;
-  }
-
-  h1 a {
-    text-decoration: none;
-    color: #ffcc00;
-  }
+  h1:hover { opacity: 1; }
+  h1 a { text-decoration: none; color: #ffcc00; }
 
   .contenedor {
     display: flex;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 160px); /* Ajustado para dar espacio al título y subtítulo */
     overflow: hidden;
+    flex-direction: row; /* Asegura el orden de izquierda a derecha */
   }
 
-  /* --- CAMBIOS AQUÍ: GRID DE 2 COLUMNAS --- */
+  /* --- MINIATURAS CON BARRA A LA IZQUIERDA --- */
   .thumbs {
     width: var(--thumb-width);
     overflow-y: auto;
     background-color: #111;
     padding: 10px;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr; /* Crea las dos columnas */
-    align-content: start;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
-    /* --- CAMBIO AQUÍ: Mueve la barra a la izquierda --- */
-  direction: rtl; 
-
-  /* --- CAMBIOS AQUÍ: BARRA DE DESPLAZAMIENTO DISCRETA --- */
-  .thumbs::-webkit-scrollbar {
-    width: 4px; /* Muy delgada */
+    
+    /* Mueve la barra a la izquierda sin romper el layout */
+    direction: rtl; 
   }
 
-  .thumbs::-webkit-scrollbar-track {
-    background: #111; 
-  }
-
-  .thumbs::-webkit-scrollbar-thumb {
-    background: #333; /* Color oscuro para que no resalte */
-    border-radius: 10px;
-  }
-
-  .thumbs::-webkit-scrollbar-thumb:hover {
-    background: #444; 
-  }
-
-  /* Para Firefox */
-  .thumbs {
-    scrollbar-width: thin;
-    scrollbar-color: #333 #111;
-  }
-
+  /* Importante: esto endereza las imágenes dentro del contenedor RTL */
   .thumbs img {
+    direction: ltr; 
     width: 100%;
-    aspect-ratio: 1 / 1; /* Opcional: hace las miniaturas cuadradas */
-    object-fit: cover;   /* Opcional: asegura que la imagen llene el cuadrado sin deformarse */
+    aspect-ratio: 1/1;
+    object-fit: cover;
     cursor: pointer;
     border-radius: 4px;
     transition: transform 0.2s;
   }
 
-  .thumbs img:hover {
-    transform: scale(1.05);
+  .thumbs img:hover { transform: scale(1.05); }
+
+  /* --- BARRA DE DESPLAZAMIENTO DISCRETA --- */
+  .thumbs::-webkit-scrollbar {
+    width: 5px;
+  }
+  .thumbs::-webkit-scrollbar-track {
+    background: #0c0c0c;
+  }
+  .thumbs::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
   }
 
-.previsualizacion {
-  flex: 1;
-  display: flex;
-  align-items: center;      /* Mantiene la foto centrada verticalmente */
-  justify-content: flex-start; /* CAMBIO: Mueve la foto a la izquierda */
-  overflow: hidden;
-  padding-left: 20px;       /* Controla la distancia exacta entre miniaturas y foto */
-}
+  /* --- PREVISUALIZACIÓN PEGADA A LAS MINIATURAS --- */
+  .previsualizacion {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Pega la imagen a la izquierda */
+    padding-left: 20px; /* Espacio exacto entre miniaturas y foto grande */
+    background-color: #0c0c0c;
+  }
 
   .previsualizacion img {
-    max-width: 100%;
-    max-height: 90vh;
+    max-width: 95%;
+    max-height: 90%;
     border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
   }
 
   .subtitulo {
     text-align: center;
     font-size: 0.9em;
     color: #999;
-    margin: 10px 0;
+    padding: 10px 0;
   }
-
-  .subtitulo a {
-    color: #574e2f;
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  .subtitulo a:hover {
-    text-decoration: underline;
-  }
+  .subtitulo a { color: #574e2f; text-decoration: none; font-weight: 600; }
 </style>
 </head>
 <body>
