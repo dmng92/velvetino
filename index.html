@@ -95,14 +95,14 @@
     transform: scale(1.05);
   }
 
-  .previsualizacion {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 20px;
-  }
+.previsualizacion {
+  flex: 1;
+  display: flex;
+  align-items: center;      /* Mantiene la foto centrada verticalmente */
+  justify-content: flex-start; /* CAMBIO: Mueve la foto a la izquierda */
+  overflow: hidden;
+  padding-left: 20px;       /* Controla la distancia exacta entre miniaturas y foto */
+}
 
   .previsualizacion img {
     max-width: 100%;
