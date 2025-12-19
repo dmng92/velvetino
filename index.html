@@ -8,7 +8,7 @@
 <style>
   :root {
     /* Ajustamos el ancho para que quepan dos columnas de unos 100px aprox */
-    --thumb-width: 220px; 
+    --thumb-width: 350px; 
   }
 
   html, body {
@@ -55,6 +55,8 @@
     grid-template-columns: 1fr 1fr 1fr; /* Crea las dos columnas */
     align-content: start;
     gap: 8px;
+    /* --- CAMBIO AQUÍ: Mueve la barra a la izquierda --- */
+  direction: rtl; 
   }
 
   /* --- CAMBIOS AQUÍ: BARRA DE DESPLAZAMIENTO DISCRETA --- */
