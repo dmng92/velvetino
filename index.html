@@ -1,150 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dmng92</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    /* Ajusta aquí el ancho del panel de miniaturas */
-    --thumb-width: 350px; 
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>thisisaformicatable©</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000;
+            --secondary-color: #666;
+            --border-color: #000;
+            --bg-color: #fff;
+        }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Manrope', sans-serif;
-    background-color: #0c0c0c;
-    color: #ccc;
-    overflow: hidden;
-  }
+        body {
+            margin: 0;
+            padding: 40px 5%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            line-height: 1.5;
+        }
 
-  h1 {
-    text-align: left;
-    margin: 0;
-    padding: 10px 20px;
-    font-size: 6em; /* Reducido un poco para que no empuje todo hacia abajo */
-    color: #ffcc00;
-    opacity: 0.5;
-    transition: opacity 0.3s;
-  }
+        /* --- ENCABEZADO ESTILO "LAMP" --- */
+        header {
+            margin-bottom: 50px;
+        }
 
-  h1:hover { opacity: 1; }
-  h1 a { text-decoration: none; color: #ffcc00; }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
 
-  .contenedor {
-    display: flex;
-    height: calc(100vh - 160px); /* Ajustado para dar espacio al título y subtítulo */
-    overflow: hidden;
-    flex-direction: row; /* Asegura el orden de izquierda a derecha */
-  }
+        .tagline {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-top: 8px;
+        }
 
-  /* --- MINIATURAS CON BARRA A LA IZQUIERDA --- */
-  .thumbs {
-    width: var(--thumb-width);
-    overflow-y: auto;
-    background-color: #111;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    
-    /* Mueve la barra a la izquierda sin romper el layout */
-    direction: rtl; 
-  }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 0;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
 
-  /* Importante: esto endereza las imágenes dentro del contenedor RTL */
-  .thumbs img {
-    direction: ltr; 
-    width: 100%;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: transform 0.2s;
-  }
+        .nav-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
 
-  .thumbs img:hover { transform: scale(1.05); }
+        .nav-links a:hover { opacity: 0.6; }
 
-  /* --- BARRA DE DESPLAZAMIENTO DISCRETA --- */
-  .thumbs::-webkit-scrollbar {
-    width: 5px;
-  }
-  .thumbs::-webkit-scrollbar-track {
-    background: #0c0c0c;
-  }
-  .thumbs::-webkit-scrollbar-thumb {
-    background: #333;
-    border-radius: 10px;
-  }
+        /* --- GRILLA DE GALERÍA --- */
+        #gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+            gap: 60px 30px; /* Mucho espacio vertical para el respiro visual */
+            margin-top: 50px;
+        }
 
-  /* --- PREVISUALIZACIÓN PEGADA A LAS MINIATURAS --- */
-  .previsualizacion {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start; /* Pega la imagen a la izquierda */
-    padding-left: 20px; /* Espacio exacto entre miniaturas y foto grande */
-    background-color: #0c0c0c;
-  }
+        .item {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+        }
 
-  .previsualizacion img {
-    max-width: 95%;
-    max-height: 90%;
-    border-radius: 4px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-  }
+        .img-container {
+            width: 100%;
+            overflow: hidden;
+            background-color: #f9f9f9;
+        }
 
-  .subtitulo {
-    text-align: center;
-    font-size: 0.9em;
-    color: #999;
-    padding: 10px 0;
-  }
-  .subtitulo a { color: #574e2f; text-decoration: none; font-weight: 600; }
-</style>
+        .item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        .item:hover img {
+            opacity: 0.8;
+        }
+
+        .item-info {
+            margin-top: 15px;
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: capitalize;
+        }
+
+        .item-desc {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            margin-top: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #gallery { grid-template-columns: 1fr; }
+            body { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 <body>
-  <h1><a href="https://dmng92.github.io/dmng92/">thisisaformicatable</a></h1>
 
-  <div class="contenedor">
-    <div class="thumbs" id="galeria-thumbs"></div>
-    <div class="previsualizacion">
-      <img id="imagen-principal" src="" alt="Imagen seleccionada">
-    </div>
-  </div>
+    <header>
+        <h1>thisisaformicatable©</h1>
+        <div class="tagline">photography and visual archive.</div>
+        
+        <nav>
+            <div class="controls">
+                <span>☼ layout 01</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">follow</a>
+                <a href="#">archive</a>
+            </div>
+        </nav>
+    </header>
 
-  <div class="subtitulo">
-    <span>ig</span>
-    <a href="https://instagram.com/_nicoantico" target="_blank" rel="noopener noreferrer">@_nicoantico</a>
-  </div>
+    <main id="gallery">
+        </main>
 
-  <script src="imagenesBaja.js"></script>
-  <script src="imagenesAlta.js"></script>
-  <script>
-    const contenedorThumbs = document.getElementById('galeria-thumbs');
-    const imagenPrincipal = document.getElementById('imagen-principal');
+    <script>
+        // 1. LISTA DE TUS IMÁGENES
+        // Solo tienes que escribir el nombre del archivo aquí
+        const imagenes = [
+            'foto1.jpg',
+            'foto2.jpg',
+            'foto3.jpg',
+            'foto4.jpg'
+        ];
 
-    let imagenActual = 0;
+        // 2. CONFIGURACIÓN DE CARPETA
+        const rutaCarpeta = 'fotos/'; 
 
-    function mostrarImagen(index) {
-      imagenPrincipal.src = `imagenesAlta/${imagenesAlta[index]}`;
-      imagenActual = index;
-    }
+        const contenedor = document.getElementById('gallery');
 
-    function crearMiniaturas() {
-      imagenesBaja.forEach((img, i) => {
-        const thumb = document.createElement('img');
-        thumb.src = `imagenesBaja/${img}`;
-        thumb.alt = `Miniatura ${i}`;
-        thumb.addEventListener('click', () => mostrarImagen(i));
-        contenedorThumbs.appendChild(thumb);
-      });
-    }
+        function cargarGaleria() {
+            imagenes.forEach(nombre => {
+                // Crear estructura
+                const item = document.createElement('div');
+                item.className = 'item';
 
-    crearMiniaturas();
-    mostrarImagen(0);
-  </script>
+                // Limpiar el nombre para el título (quita la extensión y guiones)
+                const tituloLimpio = nombre.split('.')[0].replace(/-/g, ' ');
+
+                item.innerHTML = `
+                    <div class="img-container">
+                        <img src="${rutaCarpeta}${nombre}" alt="${tituloLimpio}" loading="lazy">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">${tituloLimpio}</div>
+                        <div class="item-desc">view project</div>
+                    </div>
+                `;
+                
+                contenedor.appendChild(item);
+            });
+        }
+
+        // Ejecutar al cargar la página
+        window.onload = cargarGaleria;
+    </script>
 </body>
 </html>
