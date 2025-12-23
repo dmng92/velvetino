@@ -6,7 +6,6 @@
     <title>velvetino home©</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Variables de color para facilitar el cambio de modo */
         :root {
             --bg-color: #ffffff;
             --text-primary: #000000;
@@ -15,7 +14,6 @@
             --item-bg: #f9f9f9;
         }
 
-        /* Colores para el Modo Oscuro */
         [data-theme="dark"] {
             --bg-color: #0c0c0c;
             --text-primary: #ffffff;
@@ -34,19 +32,8 @@
         }
 
         header { margin-bottom: 50px; }
-
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 600;
-            margin: 0;
-            letter-spacing: -0.02em;
-        }
-
-        .tagline {
-            font-size: 1rem;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
+        h1 { font-size: 2.2rem; font-weight: 600; margin: 0; letter-spacing: -0.02em; cursor: pointer; }
+        .tagline { font-size: 1rem; color: var(--text-secondary); margin-top: 8px; }
 
         nav {
             display: flex;
@@ -58,104 +45,51 @@
             margin-top: 30px;
         }
 
-        /* --- ESTILO DEL INTERRUPTOR (SWITCH) --- */
-        .theme-switch {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            user-select: none;
-        }
+        .theme-switch { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.85rem; user-select: none; }
+        .switch-track { width: 40px; height: 20px; background-color: var(--text-primary); border-radius: 20px; position: relative; transition: 0.3s; }
+        .switch-circle { width: 14px; height: 14px; background-color: var(--bg-color); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.3s; }
+        [data-theme="dark"] .switch-circle { left: 23px; }
 
-        .switch-track {
-            width: 40px;
-            height: 20px;
-            background-color: var(--text-primary);
-            border-radius: 20px;
-            position: relative;
-            transition: 0.3s;
-        }
+        .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
-        .switch-circle {
-            width: 14px;
-            height: 14px;
-            background-color: var(--bg-color);
-            border-radius: 50%;
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            transition: 0.3s;
-        }
+        /* --- VISTAS --- */
+        #gallery, #product-detail { display: none; margin-top: 50px; }
+        #gallery.active, #product-detail.active { display: block; }
 
-        [data-theme="dark"] .switch-circle {
-            left: 23px;
-        }
+        /* Galería Principal */
+        #gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 60px 30px; }
+        .item { opacity: 0; transform: translateY(20px); transition: 0.8s; cursor: pointer; }
+        .item.visible { opacity: 1; transform: translateY(0); }
+        .img-container { width: 100%; background-color: var(--item-bg); overflow: hidden; }
+        .item img { width: 100%; display: block; }
 
-        .nav-links a {
-            color: var(--text-primary);
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-        }
-
-        /* --- GALERÍA --- */
-        #gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px 30px;
-            margin-top: 50px;
-        }
-
-        .item {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .img-container {
-            width: 100%;
-            background-color: var(--item-bg);
-            overflow: hidden;
-        }
-
-        .item img {
-            width: 100%;
-            display: block;
-            transition: opacity 0.3s;
-        }
-
-        .item-info { margin-top: 15px; }
-        .item-title { font-weight: 600; }
-        .item-desc { font-size: 0.85rem; color: var(--text-secondary); }
+        /* Detalle de Producto */
+        .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .detail-grid img { width: 100%; height: auto; border-radius: 2px; }
+        .detail-info { margin-bottom: 40px; }
+        .detail-info h2 { font-size: 1.8rem; margin: 0 0 10px 0; }
+        .detail-info p { color: var(--text-secondary); max-width: 600px; }
 
         @media (max-width: 768px) {
             #gallery { grid-template-columns: 1fr; }
+            body { padding: 20px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>velvetino home©</h1>
-        <div class="tagline">almohadones y estilo y la poti y y.</div>
-        
+        <h1 onclick="irAHome()">velvetino home©</h1>
+        <div class="tagline">almohadones y estilo para tu hogar.</div>
         <nav>
             <div class="theme-switch" id="theme-toggle">
                 <span>☼</span>
-                <div class="switch-track">
-                    <div class="switch-circle"></div>
-                </div>
+                <div class="switch-track"><div class="switch-circle"></div></div>
                 <span>☾</span>
             </div>
-
             <div class="nav-links">
-                <a href="https://www.facebook.com/marketplace/profile/61550225454399">follow</a>
+                <a href="https://www.facebook.com/marketplace/profile/61550225454399" target="_blank">follow</a>
                 <a href="#">archive</a>
             </div>
         </nav>
@@ -163,31 +97,66 @@
 
     <main id="gallery"></main>
 
+    <main id="product-detail">
+        <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
+        <div id="detail-content"></div>
+    </main>
+
     <script>
-        // 1. ESTRUCTURA DE PRODUCTOS (Asegúrate de que existan las carpetas en imagenesAlta/)
+        // 1. BASE DE DATOS DE PRODUCTOS
         const productos = [
             {
-                nombre: "Set almohadones jardín camastro estilo futón",
+                id: "almohadon-terciopelo",
+                nombre: "Almohadón Terciopelo",
+                descripcion: "Set de almohadones para exterior/jardin o camastro. confeccionado en tela Panamá(apto exterior) Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto :) CÓRDOBA",
                 carpeta: "set-almohadones-jardín-camastro-estilo-futon",
-                fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] // La primera foto será la portada
+                fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
             },
             {
+                id: "almohadon-lino",
                 nombre: "Almohadón Lino",
+                descripcion: "Lino natural pre-lavado. Aporta frescura y una estética artesanal única a cualquier ambiente.",
                 carpeta: "almohadon-lino",
                 fotos: ["foto3.jpg", "foto4.jpg"]
             }
         ];
 
-        const rutaBase = 'fotos/'; 
-        const contenedor = document.getElementById('gallery');
+        const rutaBase = 'imagenesAlta/';
+        const galleryView = document.getElementById('gallery');
+        const detailView = document.getElementById('product-detail');
+        const detailContent = document.getElementById('detail-content');
 
-        // 2. FUNCIÓN CARGAR GALERÍA
-        function cargarGaleria() {
+        // 2. NAVEGACIÓN
+        function render() {
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('p');
+
+            if (productId) {
+                mostrarDetalle(productId);
+            } else {
+                mostrarGaleria();
+            }
+        }
+
+        function irAHome() {
+            window.history.pushState({}, '', window.location.pathname);
+            render();
+        }
+
+        function irAProducto(id) {
+            window.history.pushState({}, '', `?p=${id}`);
+            render();
+        }
+
+        // 3. RENDERIZAR GALERÍA
+        function mostrarGaleria() {
+            detailView.classList.remove('active');
+            galleryView.classList.add('active');
+            galleryView.innerHTML = '';
+
             productos.forEach((prod, index) => {
                 const item = document.createElement('div');
                 item.className = 'item';
-                
-                // Definimos la ruta de la portada (la primera imagen de la lista del producto)
                 const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
 
                 item.innerHTML = `
@@ -196,35 +165,47 @@
                     </div>
                     <div class="item-info">
                         <div class="item-title">${prod.nombre}</div>
-                        <div class="item-desc">view project</div>
+                        <div class="item-desc">ver detalles</div>
                     </div>
                 `;
-                contenedor.appendChild(item);
-                
+                item.onclick = () => irAProducto(prod.id);
+                galleryView.appendChild(item);
                 setTimeout(() => item.classList.add('visible'), 100 * index);
             });
         }
 
-        // 3. LÓGICA MODO OSCURO
-        const btnToggle = document.getElementById('theme-toggle');
-        const currentTheme = localStorage.getItem('theme');
+        // 4. RENDERIZAR DETALLE
+        function mostrarDetalle(id) {
+            const prod = productos.find(p => p.id === id);
+            if (!prod) return irAHome();
 
-        if (currentTheme) {
-            document.documentElement.setAttribute('data-theme', currentTheme);
+            galleryView.classList.remove('active');
+            detailView.classList.add('active');
+            window.scrollTo(0,0);
+
+            detailContent.innerHTML = `
+                <div class="detail-info">
+                    <h2>${prod.nombre}</h2>
+                    <p>${prod.descripcion}</p>
+                </div>
+                <div class="detail-grid">
+                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
+                </div>
+            `;
         }
 
+        // 5. MODO OSCURO
+        const btnToggle = document.getElementById('theme-toggle');
         btnToggle.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'light');
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-            }
+            let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
         });
+        if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
-        window.onload = cargarGaleria;
+        // Detectar cambios en la URL (botón atrás del navegador)
+        window.onpopstate = render;
+        window.onload = render;
     </script>
 </body>
 </html>
