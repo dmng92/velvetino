@@ -164,36 +164,43 @@
     <main id="gallery"></main>
 
     <script>
-        // 1. LISTA DE TUS IMÁGENES (Asegúrate de que existan en la carpeta imagenesAlta/)
-        const imagenes = [
-            'foto1.jpg',
-            'foto2.jpg',
-            'foto3.jpg',
-            'foto4.jpg'
+        // 1. ESTRUCTURA DE PRODUCTOS (Asegúrate de que existan las carpetas en imagenesAlta/)
+        const productos = [
+            {
+                nombre: "Set almohadones jardín camastro estilo futón",
+                carpeta: "set-almohadones-jardín-camastro-estilo-futon",
+                fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] // La primera foto será la portada
+            },
+            {
+                nombre: "Almohadón Lino",
+                carpeta: "almohadon-lino",
+                fotos: ["foto3.jpg", "foto4.jpg"]
+            }
         ];
 
-        const rutaCarpeta = 'imagenesAlta/'; 
+        const rutaBase = 'fotos/'; 
         const contenedor = document.getElementById('gallery');
 
         // 2. FUNCIÓN CARGAR GALERÍA
         function cargarGaleria() {
-            imagenes.forEach((nombre, index) => {
+            productos.forEach((prod, index) => {
                 const item = document.createElement('div');
                 item.className = 'item';
-                const tituloLimpio = nombre.split('.')[0].replace(/-/g, ' ');
+                
+                // Definimos la ruta de la portada (la primera imagen de la lista del producto)
+                const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
 
                 item.innerHTML = `
                     <div class="img-container">
-                        <img src="${rutaCarpeta}${nombre}" alt="${tituloLimpio}" loading="lazy">
+                        <img src="${fotoPortada}" alt="${prod.nombre}" loading="lazy">
                     </div>
                     <div class="item-info">
-                        <div class="item-title">${tituloLimpio}</div>
+                        <div class="item-title">${prod.nombre}</div>
                         <div class="item-desc">view project</div>
                     </div>
                 `;
                 contenedor.appendChild(item);
                 
-                // Efecto fade-in secuencial
                 setTimeout(() => item.classList.add('visible'), 100 * index);
             });
         }
