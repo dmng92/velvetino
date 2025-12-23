@@ -56,38 +56,53 @@
         #gallery, #product-detail { display: none; margin-top: 50px; }
         #gallery.active, #product-detail.active { display: block; }
 
-        /* --- CAMBIO AQUÍ: Galería Principal de 4 Columnas --- */
-        #gallery { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); /* Crea 4 columnas iguales */
-            gap: 30px 20px; /* Reduce un poco el espacio para que quepan mejor */
+        /* --- GALERÍA PRINCIPAL (4 COLUMNAS) --- */
+        #gallery.active { 
+            display: grid !important; 
+            grid-template-columns: repeat(4, 1fr) !important; 
+            gap: 40px 20px; 
         }
-        
+
         .item { opacity: 0; transform: translateY(20px); transition: 0.8s; cursor: pointer; }
         .item.visible { opacity: 1; transform: translateY(0); }
-        .img-container { width: 100%; background-color: var(--item-bg); overflow: hidden; }
-        .item img { width: 100%; display: block; transition: transform 0.3s ease; }
+
+        .img-container { 
+            width: 100%; 
+            aspect-ratio: 1 / 1; /* Hace las miniaturas cuadradas */
+            background-color: var(--item-bg); 
+            overflow: hidden; 
+        }
+
+        .item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Asegura que la imagen llene el contenedor sin deformarse */
+            display: block; 
+            transition: transform 0.4s ease;
+        }
+
         .item:hover img { transform: scale(1.05); }
 
-        /* Títulos de miniaturas más pequeños para las 4 columnas */
-        .item-title { font-size: 0.9rem; margin-top: 10px; }
+        .item-info { margin-top: 12px; }
+        .item-title { font-weight: 600; font-size: 0.9rem; }
 
-        /* Detalle de Producto */
+        /* --- DETALLE DE PRODUCTO --- */
         .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
         .detail-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         .detail-grid img { width: 100%; height: auto; border-radius: 2px; }
         .detail-info { margin-bottom: 40px; }
         .detail-info h2 { font-size: 1.8rem; margin: 0 0 10px 0; }
-        .detail-info p { color: var(--text-secondary); max-width: 600px; }
+        .detail-info p { color: var(--text-secondary); max-width: 600px; line-height: 1.6; }
 
-        /* Ajuste para tablets y móviles */
+        /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
-            #gallery { grid-template-columns: repeat(2, 1fr); } /* 2 columnas en tablets */
+            #gallery.active { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
-        @media (max-width: 768px) {
-            #gallery { grid-template-columns: 1fr; } /* 1 columna en móviles */
+        @media (max-width: 600px) {
+            #gallery.active { grid-template-columns: 1fr !important; }
             body { padding: 20px; }
+            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -117,18 +132,19 @@
     </main>
 
     <script>
+        // 1. BASE DE DATOS DE PRODUCTOS
         const productos = [
             {
-                id: "almohadon-terciopelo",
-                nombre: "Almohadón Terciopelo",
-                descripcion: "Set de almohadones para exterior/jardin o camastro. confeccionado en tela Panamá(apto exterior) Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto :) CÓRDOBA",
+                id: "set-jardin-camastro",
+                nombre: "Set Almohadones Jardín/Camastro",
+                descripcion: "Set de almohadones para exterior/jardin o camastro. Confeccionado en tela Panamá (apto exterior). Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto. Córdoba Capital.",
                 carpeta: "set-almohadones-jardín-camastro-estilo-futon",
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
             },
             {
-                id: "almohadon-sillon-de-piso",
-                nombre: "Almohadón-sillón de piso",
-                descripcion: "Almohadon para living/jardin o el uso que prefieras, confeccionado en pana premium color verde oliva. medidas 1.40x70cm. realizo pedidos en telas para exterior o interior del tamaño y color que prefieras. consultame! CORDOBA CAPITAL.",
+                id: "sillon-de-piso-oliva",
+                nombre: "Almohadón-sillón de Piso",
+                descripcion: "Almohadon para living/jardin, confeccionado en pana premium color verde oliva. Medidas 1.40x70cm. Realizo pedidos en telas para exterior o interior del tamaño y color que prefieras. Córdoba Capital.",
                 carpeta: "almohadon- sillon de piso",
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg"] 
             }
@@ -139,6 +155,7 @@
         const detailView = document.getElementById('product-detail');
         const detailContent = document.getElementById('detail-content');
 
+        // 2. SISTEMA DE NAVEGACIÓN
         function render() {
             const params = new URLSearchParams(window.location.search);
             const productId = params.get('p');
@@ -159,6 +176,7 @@
             render();
         }
 
+        // 3. RENDERIZAR GALERÍA (HOME)
         function mostrarGaleria() {
             detailView.classList.remove('active');
             galleryView.classList.add('active');
@@ -179,10 +197,13 @@
                 `;
                 item.onclick = () => irAProducto(prod.id);
                 galleryView.appendChild(item);
-                setTimeout(() => item.classList.add('visible'), 100 * index);
+                
+                // Efecto de entrada suave
+                setTimeout(() => item.classList.add('visible'), 80 * index);
             });
         }
 
+        // 4. RENDERIZAR DETALLE DE PRODUCTO
         function mostrarDetalle(id) {
             const prod = productos.find(p => p.id === id);
             if (!prod) return irAHome();
@@ -197,11 +218,12 @@
                     <p>${prod.descripcion}</p>
                 </div>
                 <div class="detail-grid">
-                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
+                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle de ${prod.nombre}">`).join('')}
                 </div>
             `;
         }
 
+        // 5. MODO OSCURO
         const btnToggle = document.getElementById('theme-toggle');
         btnToggle.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -210,6 +232,7 @@
         });
         if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
+        // Control de historial del navegador
         window.onpopstate = render;
         window.onload = render;
     </script>
