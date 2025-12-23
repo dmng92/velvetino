@@ -52,57 +52,45 @@
 
         .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
-        /* --- VISTAS --- */
-        #gallery, #product-detail { display: none; margin-top: 50px; }
-        #gallery.active, #product-detail.active { display: block; }
+        /* --- CONTENEDORES --- */
+        #product-detail { 
+            display: none; 
+            margin-bottom: 80px; /* Espacio para separar del catálogo */
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 60px;
+        }
+        #product-detail.active { display: block; }
 
-        /* --- GALERÍA PRINCIPAL (4 COLUMNAS) --- */
-        #gallery.active { 
+        #gallery { 
             display: grid !important; 
             grid-template-columns: repeat(4, 1fr) !important; 
             gap: 40px 20px; 
+            margin-top: 50px;
         }
 
+        /* --- ESTILOS DE ITEMS --- */
         .item { opacity: 0; transform: translateY(20px); transition: 0.8s; cursor: pointer; }
         .item.visible { opacity: 1; transform: translateY(0); }
-
-        .img-container { 
-            width: 100%; 
-            aspect-ratio: 1 / 1; /* Hace las miniaturas cuadradas */
-            background-color: var(--item-bg); 
-            overflow: hidden; 
-        }
-
-        .item img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; /* Asegura que la imagen llene el contenedor sin deformarse */
-            display: block; 
-            transition: transform 0.4s ease;
-        }
-
+        .img-container { width: 100%; aspect-ratio: 1 / 1; background-color: var(--item-bg); overflow: hidden; }
+        .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
         .item:hover img { transform: scale(1.05); }
-
         .item-info { margin-top: 12px; }
         .item-title { font-weight: 600; font-size: 0.9rem; }
 
         /* --- DETALLE DE PRODUCTO --- */
         .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
-        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .detail-grid img { width: 100%; height: auto; border-radius: 2px; }
-        .detail-info { margin-bottom: 40px; }
-        .detail-info h2 { font-size: 1.8rem; margin: 0 0 10px 0; }
-        .detail-info p { color: var(--text-secondary); max-width: 600px; line-height: 1.6; }
+        .detail-info h2 { font-size: 2.2rem; margin: 0 0 15px 0; font-weight: 600; }
+        .detail-info p { color: var(--text-secondary); max-width: 800px; line-height: 1.6; margin-bottom: 40px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .detail-grid img { width: 100%; height: auto; }
 
-        /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
-            #gallery.active { grid-template-columns: repeat(2, 1fr) !important; }
+            #gallery { grid-template-columns: repeat(2, 1fr) !important; }
         }
 
         @media (max-width: 600px) {
-            #gallery.active { grid-template-columns: 1fr !important; }
+            #gallery { grid-template-columns: 1fr !important; }
             body { padding: 20px; }
-            h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -124,26 +112,25 @@
         </nav>
     </header>
 
-    <main id="gallery"></main>
-
     <main id="product-detail">
         <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
         <div id="detail-content"></div>
     </main>
 
+    <main id="gallery"></main>
+
     <script>
-        // 1. BASE DE DATOS DE PRODUCTOS
         const productos = [
             {
                 id: "set-jardin-camastro",
-                nombre: "Set Almohadones Jardín/Camastro",
+                nombre: "Almohadón Terciopelo",
                 descripcion: "Set de almohadones para exterior/jardin o camastro. Confeccionado en tela Panamá (apto exterior). Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto. Córdoba Capital.",
                 carpeta: "set-almohadones-jardín-camastro-estilo-futon",
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
             },
             {
                 id: "sillon-de-piso-oliva",
-                nombre: "Almohadón-sillón de Piso",
+                nombre: "Almohadón-sillón de piso",
                 descripcion: "Almohadon para living/jardin, confeccionado en pana premium color verde oliva. Medidas 1.40x70cm. Realizo pedidos en telas para exterior o interior del tamaño y color que prefieras. Córdoba Capital.",
                 carpeta: "almohadon- sillon de piso",
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg"] 
@@ -155,33 +142,34 @@
         const detailView = document.getElementById('product-detail');
         const detailContent = document.getElementById('detail-content');
 
-        // 2. SISTEMA DE NAVEGACIÓN
         function render() {
             const params = new URLSearchParams(window.location.search);
             const productId = params.get('p');
+            
+            mostrarGaleria(); // La galería siempre se carga
+            
             if (productId) {
                 mostrarDetalle(productId);
             } else {
-                mostrarGaleria();
+                detailView.classList.remove('active');
             }
         }
 
         function irAHome() {
             window.history.pushState({}, '', window.location.pathname);
             render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function irAProducto(id) {
             window.history.pushState({}, '', `?p=${id}`);
             render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 3. RENDERIZAR GALERÍA (HOME)
         function mostrarGaleria() {
-            detailView.classList.remove('active');
-            galleryView.classList.add('active');
-            galleryView.innerHTML = '';
-
+            if (galleryView.innerHTML !== '') return; // Evitar recargar si ya existe
+            
             productos.forEach((prod, index) => {
                 const item = document.createElement('div');
                 item.className = 'item';
@@ -197,33 +185,26 @@
                 `;
                 item.onclick = () => irAProducto(prod.id);
                 galleryView.appendChild(item);
-                
-                // Efecto de entrada suave
-                setTimeout(() => item.classList.add('visible'), 80 * index);
+                setTimeout(() => item.classList.add('visible'), 100 * index);
             });
         }
 
-        // 4. RENDERIZAR DETALLE DE PRODUCTO
         function mostrarDetalle(id) {
             const prod = productos.find(p => p.id === id);
             if (!prod) return irAHome();
 
-            galleryView.classList.remove('active');
             detailView.classList.add('active');
-            window.scrollTo(0,0);
-
             detailContent.innerHTML = `
                 <div class="detail-info">
                     <h2>${prod.nombre}</h2>
                     <p>${prod.descripcion}</p>
                 </div>
                 <div class="detail-grid">
-                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle de ${prod.nombre}">`).join('')}
+                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
                 </div>
             `;
         }
 
-        // 5. MODO OSCURO
         const btnToggle = document.getElementById('theme-toggle');
         btnToggle.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -232,7 +213,6 @@
         });
         if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
-        // Control de historial del navegador
         window.onpopstate = render;
         window.onload = render;
     </script>
