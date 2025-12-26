@@ -76,6 +76,8 @@
         .item:hover img { transform: scale(1.05); }
         .item-info { margin-top: 12px; }
         .item-title { font-weight: 600; font-size: 0.9rem; }
+        .item-price { font-size: 0.85rem; color: var(--text-secondary); }
+
 
         /* --- DETALLE DE PRODUCTO --- */
         .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
@@ -174,6 +176,7 @@
             {
                 id: "set-almohadones-sillones-futon",
                 nombre: "SET ALMOHADONES SILLONES FUTON",
+                precio: "$",
                 descripcion: "Set almohadones estilo futón. confeccionado en tela pana antimanchas. ENVIAME LA MEDIDA DESEADA PARA BRINDARTE UN PRESUPUESTO!! TRABAJAMOS POR PEDIDO!! Apto para armar un living, camastro, lo que vos prefieras! realizo a medida de colores y tamaños distintos. consultame :)",
                 carpeta: "set-almohadones-sillones-futon",
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "muestrario-pana-jaguar.jpg"] 
@@ -224,6 +227,7 @@
                     </div>
                     <div class="item-info">
                         <div class="item-title">${prod.nombre}</div>
+                        <div class="item-price">${prod.precio}</div>
                     </div>
                 `;
                 item.onclick = () => irAProducto(prod.id);
