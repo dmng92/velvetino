@@ -234,8 +234,8 @@
     <div class="footer-faq">
         <h4>Preguntas frecuentes</h4>
         <div class="faq-item">
-            <p><strong>¿Cómo realizo un pedido?</strong><br>Puedes contactarnos vía WhatsApp por el modelo que te interese.</p>
-            <p><strong>¿Puedo pedir una medida especial?</strong></p><p>¡Claro! Trabajamos a pedido. Puedes enviarnos las medidas por WhatsApp para un presupuesto personalizado.</p>
+            <p><strong>¿Cómo realizo un pedido?</strong><br>Podés contactarnos vía WhatsApp por el modelo que te interese.</p>
+            <p><strong>¿Puedo pedir una medida especial?</strong></p><p>¡Claro! Trabajamos a pedido. Enviamos las medidas que necesitás para un presupuesto personalizado.</p>
             <p><strong>¿Hacen envíos?</strong></p><p>Sí, realizamos envíos a todo el país. Los costos se calculan según la localidad de destino.</p>
 
         </div>
@@ -358,20 +358,39 @@
             });
         }
 
-        function mostrarDetalle(id) {
-            const prod = productos.find(p => p.id === id);
-            if (!prod) return irAHome();
-            detailView.classList.add('active');
-            detailContent.innerHTML = `
-                <div class="detail-info">
-                    <h2>${prod.nombre}</h2>
-                    <p>${prod.descripcion}</p>
-                </div>
-                <div class="detail-grid">
-                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
-                </div>
-            `;
-        }
+       function mostrarDetalle(id) {
+    const prod = productos.find(p => p.id === id);
+    if (!prod) return irAHome();
+    
+    // Aquí preparamos el texto para WhatsApp
+    const mensajeWA = encodeURIComponent(`Hola Velvetino! Me interesa este producto: ${prod.nombre} (ID: ${prod.id})`);
+    const linkWA = `https://api.whatsapp.com/send/?phone=5493804595851&text=${mensajeWA}`;
+
+    detailView.classList.add('active');
+    detailContent.innerHTML = `
+        <div class="detail-info">
+            <h2>${prod.nombre}</h2>
+            <p>${prod.descripcion}</p>
+            
+            <a href="${linkWA}" target="_blank" style="
+                display: inline-block;
+                padding: 12px 24px;
+                background-color: var(--text-primary);
+                color: var(--bg-color);
+                text-decoration: none;
+                font-size: 0.9rem;
+                font-weight: 600;
+                margin-bottom: 40px;
+                border: 1px solid var(--text-primary);
+            ">
+                Consultar por este modelo
+            </a>
+        </div>
+        <div class="detail-grid">
+            ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
+        </div>
+    `;
+}
 
         const btnToggle = document.getElementById('theme-toggle');
         btnToggle.addEventListener('click', () => {
