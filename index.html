@@ -210,8 +210,7 @@
             <h4>Contacto</h4>
             <ul>
                 <li><a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank">WhatsApp</a></li>
-                <li><a href="#">Instagram</a></li>
-                <li><a href="mailto:hola@velvetino.com">Email</a></li>
+                <li><a href="mailto:velvetinodeco@gmail.com">Email</a></li>
             </ul>
         </div>
         <div class="copyright">
@@ -220,6 +219,21 @@
     </footer>
 
     <script>
+
+        function mostrarSeccion(idSeccion) {
+    // 1. Ocultamos todo
+    document.getElementById('gallery').style.display = 'none';
+    document.getElementById('product-detail').classList.remove('active');
+    document.getElementById('about-section').style.display = 'none';
+    document.getElementById('faq-section').style.display = 'none';
+
+    // 2. Mostramos la elegida
+    document.getElementById(idSeccion).style.display = 'block';
+    
+    // 3. Subimos al inicio de la página
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+        
         const productos = [
             {
                 id: "almohadon-de-piso",
@@ -283,6 +297,18 @@
         const galleryView = document.getElementById('gallery');
         const detailView = document.getElementById('product-detail');
         const detailContent = document.getElementById('detail-content');
+        <main id="about-section" style="display: none; margin-top: 50px;">
+    <h2>Sobre Nosotros</h2>
+    <p>Somos un emprendimiento de Córdoba dedicado a crear confort...</p>
+</main>
+
+<main id="faq-section" style="display: none; margin-top: 50px;">
+    <h2>Preguntas Frecuentes</h2>
+    <div class="faq-item">
+        <p><strong>¿Hacen envíos?</strong></p>
+        <p>Sí, enviamos a todo el país desde Córdoba Capital.</p>
+    </div>
+</main>
 
         function render() {
             const params = new URLSearchParams(window.location.search);
