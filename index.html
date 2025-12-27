@@ -32,7 +32,7 @@
         }
 
         /* --- BARRA MÓVIL (MARQUEE INFINITO) --- */
-        /* --- BARRA MÓVIL (MARQUEE INFINITO) --- */
+/* --- BARRA MÓVIL (MARQUEE INFINITO) --- */
 .marquee-container {
     width: 100%;
     background-color: transparent;
@@ -41,35 +41,30 @@
     white-space: nowrap;
     display: flex; 
     align-items: center;
-    padding: 4px 0; /* Reducido de 8px a 4px para que sea más fina */
+    padding: 4px 0; /* Altura pequeña y elegante */
     border-bottom: 1px solid var(--border-color);
     position: relative;
     z-index: 1000;
-    transition: color 0.4s ease, border-color 0.4s ease;
+}
+
+.marquee-content {
+    display: inline-flex; /* Cambiado a inline-flex para asegurar que los hijos se alineen bien */
+    animation: marquee-infinite 30s linear infinite;
+    will-change: transform; /* Ayuda al navegador a suavizar el movimiento */
 }
 
 .marquee-content span {
-    display: inline-block;
-    font-size: 0.65rem; /* Reducido de 0.7rem a 0.65rem para mayor elegancia */
+    font-size: 0.65rem;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    padding-right: 50px; 
+    padding-right: 60px; /* Espacio generoso entre frases */
 }
-        .marquee-content span {
-            display: inline-block;
-            font-size: 0.7rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            padding-right: 50px; /* Espacio entre repeticiones */
-        }
 
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); } /* Se mueve exactamente la mitad (el duplicado) */
-        }
-
+@keyframes marquee-infinite {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } /* Mueve exactamente la mitad del bloque duplicado */
+}
         /* --- ESTRUCTURA GENERAL --- */
         .main-wrapper {
             padding: 40px 5%;
@@ -166,12 +161,14 @@
 </head>
 <body>
 
-    <div class="marquee-container">
-        <div class="marquee-content">
-            <span>ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP</span>
-            <span>ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP</span>
-        </div>
+  <div class="marquee-container">
+    <div class="marquee-content">
+        <span>ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP</span>
+        <span>ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP</span>
+        <span>ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP</span>
+        <span>ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP</span>
     </div>
+</div>
 
     <div class="main-wrapper">
         <header>
