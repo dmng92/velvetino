@@ -12,6 +12,8 @@
             --text-secondary: #666666;
             --border-color: #000000;
             --item-bg: #f9f9f9;
+            ---bg: #ffffff;
+            --marquee-text: #000000;
         }
 
         [data-theme="dark"] {
@@ -20,35 +22,40 @@
             --text-secondary: #999999;
             --border-color: #333333;
             --item-bg: #1a1a1a;
+            --marquee-bg: #000000; /* Se mantiene blanco por pedido */
+            --marquee-text: #ffffff;
         }
 
         body {
             margin: 0;
-            padding: 0;
+            padding: 0; /* Quitamos el padding superior para la barra móvil */
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-primary);
             transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* --- MARQUEE SUPERIOR --- */
+        /* --- BARRA MÓVIL (MARQUEE) --- */
         .marquee-container {
             width: 100%;
             background-color: transparent;
             color: var(--text-primary);
             overflow: hidden;
             white-space: nowrap;
-            display: flex;
+            display: flex; 
             align-items: center;
-            height: 28px;
-            position: relative;
+            padding: 2.8px 0;
             border-bottom: 1px solid var(--border-color);
+            position: relative;
+            top: 0;
+            z-index: 1000;
             transition: color 0.4s ease, border-color 0.4s ease;
         }
 
         .marquee-content {
             display: inline-block;
-            animation: marquee 25s linear infinite;
+            line-height: 1; /* Evita espacios extra arriba o abajo del texto */
+            animation: marquee 20s linear infinite;
             font-size: 0.7rem;
             font-weight: 500;
             text-transform: uppercase;
@@ -60,7 +67,10 @@
             to { transform: translateX(-50%); }
         }
 
-        .main-wrapper { padding: 40px 5%; }
+        /* --- ESTRUCTURA GENERAL --- */
+        .main-wrapper {
+            padding: 40px 5%;
+        }
 
         header { margin-bottom: 50px; }
         h1 { font-size: 2.2rem; font-weight: 600; margin: 0; letter-spacing: -0.02em; cursor: pointer; }
@@ -81,11 +91,18 @@
         .switch-circle { width: 14px; height: 14px; background-color: var(--bg-color); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.3s; }
         [data-theme="dark"] .switch-circle { left: 23px; }
 
-        /* --- SECCIONES --- */
-        #gallery, #product-detail, #about-section, #faq-section { display: none; }
-        #gallery.active, #product-detail.active, #about-section.active, #faq-section.active { display: block; }
+        .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
-        #gallery.active { 
+        /* --- GALERÍA Y DETALLES --- */
+        #product-detail { 
+            display: none; 
+            margin-bottom: 80px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 60px;
+        }
+        #product-detail.active { display: block; }
+
+        #gallery { 
             display: grid !important; 
             grid-template-columns: repeat(4, 1fr) !important; 
             gap: 40px 20px; 
@@ -97,20 +114,16 @@
         .img-container { width: 100%; aspect-ratio: 1 / 1; background-color: var(--item-bg); overflow: hidden; }
         .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
         .item:hover img { transform: scale(1.05); }
-
-        /* Estilos de Texto para Secciones */
-        .item { opacity: 0; transform: translateY(20px); transition: 0.8s; cursor: pointer; }
-        .item.visible { opacity: 1; transform: translateY(0); }
-        .img-container { width: 100%; aspect-ratio: 1 / 1; background-color: var(--item-bg); overflow: hidden; }
-        .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
-        .item:hover img { transform: scale(1.05); }
         .item-info { margin-top: 12px; }
         .item-title { font-weight: 600; font-size: 0.9rem; }
-        .section-content { max-width: 800px; line-height: 1.8; margin-top: 40px; }
-        .section-content h2 { font-size: 2rem; margin-bottom: 30px; }
-        .faq-item { margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
 
-        /* --- FOOTER --- */
+        .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
+        .detail-info h2 { font-size: 2.2rem; margin: 0 0 15px 0; font-weight: 600; }
+        .detail-info p { color: var(--text-secondary); max-width: 800px; line-height: 1.6; margin-bottom: 40px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .detail-grid img { width: 100%; height: auto; }
+
+        /* --- PIÉ DE PÁGINA (FOOTER) --- */
         footer {
             margin-top: 100px;
             padding: 60px 5%;
@@ -120,19 +133,39 @@
             gap: 40px;
         }
 
+        .footer-brand h3 { font-size: 1.2rem; margin: 0 0 10px 0; }
+        .footer-brand p { font-size: 0.9rem; color: var(--text-secondary); max-width: 300px; }
+        .footer-links h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
         .footer-links ul { list-style: none; padding: 0; margin: 0; }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; cursor: pointer; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
         .footer-links a:hover { color: var(--text-primary); }
+        .copyright {
+            grid-column: 1 / -1;
+            padding-top: 40px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
 
-        @media (max-width: 1024px) { #gallery.active { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 600px) { #gallery.active { grid-template-columns: 1fr !important; } footer { grid-template-columns: 1fr; } }
+        @media (max-width: 1024px) {
+            #gallery { grid-template-columns: repeat(2, 1fr) !important; }
+            footer { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            #gallery { grid-template-columns: 1fr !important; }
+            footer { grid-template-columns: 1fr; text-align: center; }
+            .footer-brand p { margin: 0 auto; }
+        }
+
     </style>
 </head>
 <body>
 
     <div class="marquee-container">
         <div class="marquee-content">
-            ENVIOS A TODO EL PAÍS — PRODUCTOS ARTESANALES — CORDOBA CAPITAL — ENVIOS A TODO EL PAÍS — PRODUCTOS ARTESANALES — CORDOBA CAPITAL —
+            ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP — ENVIOS A TODO EL PAÍS — HECHOS A MANO — CORDOBA CAPITAL — CONSULTAS POR WHATSAPP — 
         </div>
     </div>
 
@@ -147,47 +180,30 @@
                     <span>☾</span>
                 </div>
                 <div class="nav-links">
-                    <a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank" style="color: var(--text-primary); text-decoration: none; font-weight: 500;">whatsapp</a>
+                    <a href="https://api.whatsapp.com/send/?phone=5493804595851&text&type=phone_number&app_absent=0" target="_blank">whatsapp</a>
                 </div>
             </nav>
         </header>
 
-        <main id="gallery" class="active"></main>
-
         <main id="product-detail">
-            <span onclick="irAHome()" style="cursor:pointer; text-decoration:underline; font-size:0.9rem;">← volver</span>
+            <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
             <div id="detail-content"></div>
         </main>
 
-        <main id="about-section" class="section-content">
-            <h2>Sobre Nosotros</h2>
-            <p>Escribe aquí la historia de Velvetino Home. Cuál es tu inspiración, cómo surgió el emprendimiento y qué hace especiales a tus almohadones artesanos en Córdoba.</p>
-        </main>
-
-        <main id="faq-section" class="section-content">
-            <h2>Preguntas Frecuentes</h2>
-            <div class="faq-item">
-                <p><strong>¿Cómo realizo un pedido?</strong></p>
-                <p>Puedes contactarnos vía WhatsApp para pasarnos las medidas de tu almohadón o elegir uno de nuestro catálogo.</p>
-            </div>
-            <div class="faq-item">
-                <p><strong>¿Hacen envíos?</strong></p>
-                <p>Sí, realizamos envíos a todo el país desde Córdoba Capital.</p>
-            </div>
-        </main>
+        <main id="gallery"></main>
     </div>
 
     <footer>
-        <div>
+        <div class="footer-brand">
             <h3>velvetino home©</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">Especialistas en almohadones a medida y confort para cada rincón de tu casa. Hecho a mano en Córdoba, Argentina.</p>
+            <p>Especialistas en almohadones a medida y confort para cada rincón de tu casa. Hecho a mano en Córdoba, Argentina.</p>
         </div>
         <div class="footer-links">
             <h4>Navegación</h4>
             <ul>
-                <li><a onclick="irAHome()">Catálogo</a></li>
-                <li><a onclick="mostrarSeccion('about-section')">Sobre nosotros</a></li>
-                <li><a onclick="mostrarSeccion('faq-section')">Preguntas frecuentes</a></li>
+                <li><a href="#" onclick="irAHome()">Catálogo</a></li>
+                <li><a href="#">Sobre nosotros</a></li>
+                <li><a href="#">Preguntas frecuentes</a></li>
             </ul>
         </div>
         <div class="footer-links">
@@ -197,177 +213,144 @@
                 <li><a href="mailto:velvetinohome@gmail.com">Email</a></li>
             </ul>
         </div>
+        <div class="copyright">
+            © 2026 velvetino home. Todos los derechos reservados. | Diseño y desarrollo independiente.
+        </div>
     </footer>
 
     <script>
-        // Los productos y rutas se mantienen igual
         const productos = [
-
-                        {
-
+            {
                 id: "almohadon-de-piso",
-
                 nombre: "Almohadones de piso",
-
                 descripcion: "Almohadón/sillón de piso. ideal para sentarse-acostarse a leer. Confeccionado con tela pana color oliva. Medidas 1.40x 65cm. También realizo pedidos del tamaño y color que te guste.",
-
                 carpeta: "Almohadones-de-piso",
-
                 fotos: ["foto (3).jpg", "foto (2).jpg", "foto (1).jpg", "foto (4).jpg", "foto (5).jpg", "muestrario-pana-jaguar.jpg"] 
-
             },
-
             {
-
                 id: "set-jardin-camastro",
-
                 nombre: "Almohadón Terciopelo",
-
                 descripcion: "Set de almohadones para exterior/jardin o camastro. Confeccionado en tela Panamá (apto exterior). Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto. Córdoba Capital.",
-
                 carpeta: "set-almohadones-jardín-camastro-estilo-futon",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
-
             },
-
             {
-
                 id: "almohadon-sillon",
-
                 nombre: "Almohadón-sillón",
-
                 descripcion: "Almohadon, sillon para poner en camastro, piso, jardín, el uso que vos prefieras. confeccionado con tela antidesgarro color gris petróleo. medidas 1.20x70 cm. también realizo pedidos en la medida y color que te guste :) consúltame!",
-
                 carpeta: "almohadon-sillon",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "muestrario-pana-jaguar.jpg"] 
-
             },
-
             {
-
                 id: "sillon-de-piso-oliva",
-
                 nombre: "Almohadón-sillón de piso",
-
                 descripcion: "Almohadon para living/jardin, confeccionado en pana premium color verde oliva. Medidas 1.40x70cm. Realizo pedidos en telas para exterior o interior del tamaño y color que prefieras. Córdoba Capital.",
-
                 carpeta: "almohadon- sillon de piso",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg"] 
-
             },
-
             {
-
                 id: "almohadones-para-sillas-acapulco-o-asientos",
-
                 nombre: "Almohadones para sillas acapulco o asientos",
-
                 descripcion: "Almohadones para sillas medidas 85x60 ideales para silla Acapulco o cualquier silla. Realizamos por pedido! Consultar por colores. CORDOBA CAPITAL",
-
                 carpeta: "Almohadones-para-sillas-acapulco-o-asientos",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg"] 
-
             },
-
-
-
             {
-
                 id: "almohadon-estilo-futon-individual-o-set",
-
                 nombre: "Almohadón estilo futón individual o set",
-
                 descripcion: "Almohadones estilo futón para piso/camastro, set de jardín etc. confeccionados en tela pana antimanchas de la medida y color que desees. Trabajamos por pedido :) ENVIAR MEDIDAS EN CM PARA PODER PASAR UN PRESUPUESTO!! consúltame! (CÓRDOBA CAPITAL)",
-
                 carpeta: "almohadon-estilo-futon-individual-o-set",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "muestrario-pana-jaguar.jpg", "muestrario-pana-jaguar-2.jpg"] 
-
             },
-
-
-
             {
-
                 id: "set-almohadones-camastro-estilo-futon",
-
                 nombre: "Set almohadones camastro estilo futón",
-
                 descripcion: "Set de almohadones para exterior/jardin o camastro. confeccionado en tela Panamá(apto exterior) Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto :) CÓRDOBA",
-
                 carpeta: "set-almohadones-camastro-estilo-futon",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
-
             },
-
             {
-
                 id: "set-almohadones-sillones-futon",
-
                 nombre: "SET ALMOHADONES SILLONES FUTON",
-
                 descripcion: "Set almohadones estilo futón. confeccionado en tela pana antimanchas. ENVIAME LA MEDIDA DESEADA PARA BRINDARTE UN PRESUPUESTO!! TRABAJAMOS POR PEDIDO!! Apto para armar un living, camastro, lo que vos prefieras! realizo a medida de colores y tamaños distintos. consultame :)",
-
                 carpeta: "set-almohadones-sillones-futon",
-
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "muestrario-pana-jaguar.jpg"] 
-
             }
-
         ];
 
         const rutaBase = 'fotos/';
+        const galleryView = document.getElementById('gallery');
+        const detailView = document.getElementById('product-detail');
+        const detailContent = document.getElementById('detail-content');
+
+        function render() {
+            const params = new URLSearchParams(window.location.search);
+            const productId = params.get('p');
+            mostrarGaleria();
+            if (productId) {
+                mostrarDetalle(productId);
+            } else {
+                detailView.classList.remove('active');
+            }
+        }
 
         function irAHome() {
             window.history.pushState({}, '', window.location.pathname);
-            mostrarSeccion('gallery');
+            render();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function mostrarSeccion(id) {
-            // Ocultar todas
-            document.querySelectorAll('main').forEach(m => m.classList.remove('active'));
-            // Mostrar la seleccionada
-            const target = document.getElementById(id);
-            if (target) {
-                target.classList.add('active');
-                if (id === 'gallery') mostrarGaleria();
-            }
+        function irAProducto(id) {
+            window.history.pushState({}, '', `?p=${id}`);
+            render();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function mostrarGaleria() {
-            const container = document.getElementById('gallery');
-            if (container.innerHTML !== '') return;
+            if (galleryView.innerHTML !== '') return;
             productos.forEach((prod, index) => {
                 const item = document.createElement('div');
                 item.className = 'item';
-                item.innerHTML = `<div class="img-container"><img src="${rutaBase}${prod.carpeta}/${prod.fotos[0]}"></div><p>${prod.nombre}</p>`;
-                item.onclick = () => mostrarDetalle(prod.id);
-                container.appendChild(item);
+                const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
+                item.innerHTML = `
+                    <div class="img-container">
+                        <img src="${fotoPortada}" alt="${prod.nombre}" loading="lazy">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">${prod.nombre}</div>
+                    </div>
+                `;
+                item.onclick = () => irAProducto(prod.id);
+                galleryView.appendChild(item);
                 setTimeout(() => item.classList.add('visible'), 100 * index);
             });
         }
 
         function mostrarDetalle(id) {
             const prod = productos.find(p => p.id === id);
-            mostrarSeccion('product-detail');
-            document.getElementById('detail-content').innerHTML = `<h2>${prod.nombre}</h2><p>${prod.descripcion}</p><div class="detail-grid">${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}">`).join('')}</div>`;
+            if (!prod) return irAHome();
+            detailView.classList.add('active');
+            detailContent.innerHTML = `
+                <div class="detail-info">
+                    <h2>${prod.nombre}</h2>
+                    <p>${prod.descripcion}</p>
+                </div>
+                <div class="detail-grid">
+                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
+                </div>
+            `;
         }
 
-        // Modo Oscuro
         const btnToggle = document.getElementById('theme-toggle');
         btnToggle.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
         });
+        if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
-        window.onload = mostrarGaleria;
+        window.onpopstate = render;
+        window.onload = render;
     </script>
 </body>
 </html>
