@@ -362,8 +362,11 @@
     const prod = productos.find(p => p.id === id);
     if (!prod) return irAHome();
     
-    // Aquí preparamos el texto para WhatsApp
-    const mensajeWA = encodeURIComponent(`Hola Velvetino! Me interesa este producto: ${prod.nombre} (ID: ${prod.id})`);
+    // Capturamos la URL exacta en la que está el usuario
+    const urlProducto = window.location.href;
+    
+    // Armamos el mensaje incluyendo el nombre y la URL
+    const mensajeWA = encodeURIComponent(`Hola Velvetino! Me interesa este producto: ${prod.nombre}. Te adjunto el link: ${urlProducto}`);
     const linkWA = `https://api.whatsapp.com/send/?phone=5493804595851&text=${mensajeWA}`;
 
     detailView.classList.add('active');
@@ -380,10 +383,12 @@
                 text-decoration: none;
                 font-size: 0.9rem;
                 font-weight: 600;
+                margin-top: 20px;
                 margin-bottom: 40px;
                 border: 1px solid var(--text-primary);
+                transition: 0.3s;
             ">
-                Consultar por este modelo
+                Consultar por WhatsApp
             </a>
         </div>
         <div class="detail-grid">
