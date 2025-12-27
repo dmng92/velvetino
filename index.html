@@ -126,7 +126,7 @@
             margin-top: 100px;
             padding: 80px 5%;
             border-top: 1px solid var(--border-color);
-            text-align: center; /* Centra todo el contenido */
+            text-align: center;
         }
 
         .footer-brand {
@@ -150,12 +150,13 @@
         .footer-faq {
             max-width: 700px;
             margin: 0 auto 50px auto;
-            text-align: left; /* Las preguntas se leen mejor alineadas a la izquierda */
+            text-align: left;
             border-top: 1px solid var(--border-color);
             padding-top: 40px;
         }
 
-        .footer-faq h4 {
+        /* Estilo compartido para títulos de sección en el footer */
+        .footer-faq h4, .footer-contact-header h4 {
             font-size: 1.2rem;
             margin-bottom: 25px;
             text-align: center;
@@ -173,27 +174,33 @@
             margin: 5px 0;
         }
 
-        .footer-contact {
+        .footer-contact-section {
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .footer-links-container {
             display: flex;
             justify-content: center;
             gap: 30px;
-            padding-top: 20px;
         }
 
-        .footer-contact a {
+        .footer-links-container a {
             color: var(--text-primary);
             text-decoration: underline;
             font-size: 0.9rem;
             font-weight: 500;
+            text-transform: lowercase;
         }
 
         @media (max-width: 600px) {
-            .footer-contact {
+            .footer-links-container {
                 flex-direction: column;
                 gap: 15px;
             }
         }
-
     </style>
 </head>
 <body>
@@ -256,12 +263,16 @@
             </div>
         </div>
 
-        <div class="footer-contact">
-            <a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank">whatsapp</a>
-            <a href="mailto:velvetinohome@gmail.com">email</a>
+        <div class="footer-contact-section">
+            <div class="footer-contact-header">
+                <h4>Contacto</h4>
+            </div>
+            <div class="footer-links-container">
+                <a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank">whatsapp</a>
+                <a href="mailto:velvetinohome@gmail.com">email</a>
+            </div>
         </div>
     </footer>
-
     <script>
         const productos = [
             {
