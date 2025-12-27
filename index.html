@@ -82,7 +82,7 @@
         [data-theme="dark"] .switch-circle { left: 23px; }
 
         /* --- VISTAS --- */
-        #gallery, #product-detail, #about-section, #faq-section { display: none; }
+        main { display: none; }
         main.active { display: block; }
 
         #gallery.active { 
@@ -98,19 +98,18 @@
         .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: 0.4s; }
         .item:hover img { opacity: 0.8; }
         
-        /* Títulos de galería (Estilo Foto 2) */
         .item-title { font-weight: 500; font-size: 0.9rem; margin-top: 12px; letter-spacing: -0.01em; }
 
         /* Estilo para secciones de texto */
-        .section-content { max-width: 800px; line-height: 1.8; margin-top: 40px; animation: fadeIn 0.6s ease forwards; }
+        .section-content { max-width: 800px; line-height: 1.8; margin-top: 40px; }
         .section-content h2 { font-size: 2rem; font-weight: 500; margin-bottom: 25px; letter-spacing: -0.02em; }
         .faq-item { margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
         
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         /* --- DETALLE --- */
+        .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
         .detail-info h2 { font-size: 2.2rem; font-weight: 500; margin-bottom: 15px; letter-spacing: -0.02em; }
-        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; margin-top: 40px; }
+        .detail-info p { color: var(--text-secondary); margin-bottom: 40px; }
+        .detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
         .detail-grid img { width: 100%; height: auto; }
 
         /* --- FOOTER --- */
@@ -158,24 +157,20 @@
         <main id="gallery" class="active"></main>
 
         <main id="product-detail">
-            <span onclick="irAHome()" style="cursor:pointer; text-decoration:underline; font-size:0.9rem;">← volver al catálogo</span>
+            <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
             <div id="detail-content"></div>
         </main>
 
         <main id="about-section" class="section-content">
             <h2>Sobre Nosotros</h2>
-            <p>En Velvetino Home© creamos almohadones artesanales diseñados para transformar tus espacios. Cada pieza es confeccionada a mano en Córdoba, Argentina, utilizando materiales de alta calidad y cuidando cada detalle para ofrecerte confort y estilo único.</p>
+            <p>En Velvetino Home© creamos almohadones artesanales diseñados para transformar tus espacios. Cada pieza es confeccionada a mano en Córdoba, Argentina.</p>
         </main>
 
         <main id="faq-section" class="section-content">
             <h2>Preguntas Frecuentes</h2>
             <div class="faq-item">
                 <p><strong>¿Hacen envíos?</strong></p>
-                <p>Sí, realizamos envíos a todo el país. Los costos se calculan según la localidad de destino.</p>
-            </div>
-            <div class="faq-item">
-                <p><strong>¿Puedo pedir una medida especial?</strong></p>
-                <p>¡Claro! Trabajamos a pedido. Puedes enviarnos las medidas por WhatsApp para un presupuesto personalizado.</p>
+                <p>Sí, realizamos envíos a todo el país.</p>
             </div>
         </main>
     </div>
@@ -225,6 +220,7 @@
                 carpeta: "almohadon-sillon",
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg"] 
             }
+            // Agrega aquí el resto de tus productos si faltan
         ];
 
         const rutaBase = 'fotos/';
@@ -235,31 +231,33 @@
         }
 
         function mostrarSeccion(id) {
-            // Desactivar todos los main
+            // 1. Ocultar todos los main
             document.querySelectorAll('main').forEach(m => m.classList.remove('active'));
             
-            // Activar el correspondiente
-            const section = document.getElementById(id);
-            if (section) {
-                section.classList.add('active');
+            // 2. Activar el indicado
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.add('active');
                 if (id === 'gallery') renderGaleria();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function renderGaleria() {
-            const gallery = document.getElementById('gallery');
-            if (gallery.innerHTML !== '') return;
+            const container = document.getElementById('gallery');
+            if (container.innerHTML !== '') return; // Evita duplicar si ya cargó
 
             productos.forEach((prod, index) => {
                 const item = document.createElement('div');
                 item.className = 'item';
                 item.innerHTML = `
-                    <div class="img-container"><img src="${rutaBase}${prod.carpeta}/${prod.fotos[0]}" loading="lazy"></div>
+                    <div class="img-container">
+                        <img src="${rutaBase}${prod.carpeta}/${prod.fotos[0]}" alt="${prod.nombre}" loading="lazy">
+                    </div>
                     <div class="item-title">${prod.nombre}</div>
                 `;
                 item.onclick = () => mostrarDetalle(prod.id);
-                gallery.appendChild(item);
+                container.appendChild(item);
                 setTimeout(() => item.classList.add('visible'), 100 * index);
             });
         }
@@ -275,29 +273,42 @@
                     <p>${prod.descripcion}</p>
                 </div>
                 <div class="detail-grid">
-                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}">`).join('')}
+                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
                 </div>
             `;
             window.history.pushState({}, '', `?p=${productId}`);
         }
 
-        // Modo Oscuro
+        // Manejo del Switch de Modo Oscuro
         const btnToggle = document.getElementById('theme-toggle');
         btnToggle.addEventListener('click', () => {
             let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', theme);
             localStorage.setItem('theme', theme);
         });
-        if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
-        // Control de navegación inicial
+        // Inicialización
         window.onload = () => {
+            if (localStorage.getItem('theme')) {
+                document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
+            }
+            
+            const params = new URLSearchParams(window.location.search);
+            const p = params.get('p');
+            if (p) {
+                mostrarDetalle(p);
+            } else {
+                mostrarSeccion('gallery');
+            }
+        };
+
+        // Escuchar el botón "Atrás" del navegador
+        window.onpopstate = () => {
             const params = new URLSearchParams(window.location.search);
             const p = params.get('p');
             if (p) mostrarDetalle(p);
             else mostrarSeccion('gallery');
         };
-        window.onpopstate = () => location.reload();
     </script>
 </body>
 </html>
