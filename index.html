@@ -121,42 +121,95 @@
         .detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
         .detail-grid img { width: 100%; height: auto; }
 
-        /* --- PIÉ DE PÁGINA (FOOTER) --- */
+        /* --- PIÉ DE PÁGINA (FOOTER) EQUIDISTANTE --- */
         footer {
-            margin-top: 100px;
-            padding: 60px 5%;
+            margin-top: 70px;
+            padding: 80px 5%;
             border-top: 1px solid var(--border-color);
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
+            
+            /* Cambiamos a Flex para control total de equidistancia */
+            display: flex;
+            justify-content: space-between; 
+            align-items: flex-start;
             gap: 40px;
+            flex-wrap: wrap; /* Para que sea responsivo */
         }
 
-        .footer-brand h3 { font-size: 1.2rem; margin: 0 0 10px 0; }
-        .footer-brand p { font-size: 0.9rem; color: var(--text-secondary); max-width: 200px; }
-        .footer-links h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
-        .footer-links ul { list-style: none; padding: 0; margin: 0; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
-        .footer-links a:hover { color: var(--text-primary); }
-        .copyright {
-            grid-column: 1 / -1;
-            padding-top: 40px;
-            font-size: 0.75rem;
+        /* Cada una de las 3 secciones ocupará el mismo ancho */
+        .footer-brand, 
+        .footer-faq-column, 
+        .footer-contact-column {
+            flex: 1; /* Esto hace que sean equidistantes */
+            min-width: 250px; /* Evita que se amontonen en pantallas medianas */
+        }
+
+        .footer-brand h3 { 
+            font-size: 1.2rem; 
+            margin: 0 0 15px 0; 
+            text-transform: lowercase;
+        }
+
+        .footer-brand p { 
+            font-size: 0.9rem; 
+            color: var(--text-secondary); 
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Títulos de Preguntas y Contacto */
+        footer h4 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            margin-top: 0;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+        }
+
+        .faq-item p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin: 0;
             color: var(--text-secondary);
-            text-align: center;
         }
 
-        @media (max-width: 1024px) {
-            #gallery { grid-template-columns: repeat(2, 1fr) !important; }
-            footer { grid-template-columns: 1fr 1fr; }
+        .faq-item strong {
+            color: var(--text-primary);
+            display: block;
+            margin-bottom: 2px;
         }
 
-        @media (max-width: 600px) {
-            #gallery { grid-template-columns: 1fr !important; }
-            footer { grid-template-columns: 1fr; text-align: center; }
+        .footer-contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-contact-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .footer-contact-links a:hover {
+            color: var(--text-primary);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 900px) {
+            footer {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+                gap: 60px;
+            }
+            
             .footer-brand p { margin: 0 auto; }
         }
-
     </style>
 </head>
 <body>
@@ -199,26 +252,28 @@
             <h3>velvetino home©</h3>
             <p>Almohadones a medida y confort para cada rincón de tu casa. Hechos a mano en Córdoba, Argentina.</p>
         </div>
-        <div class="footer-links">
+
+        <div class="footer-faq-column">
             <h4>Preguntas frecuentes</h4>
-            <ul>
-            <p><strong>¿Cómo realizo un pedido?</strong><br>Podés contactarnos vía WhatsApp por el modelo que te interese.</br></p>
-            <p><strong>¿Puedo pedir una medida especial?</strong><br>¡Claro! Trabajamos a pedido. Envianos las medidas por WhatsApp para un presupuesto personalizado.</br></p>
-            <p><strong>¿Hacen envíos?</strong><br>Sí, realizamos envíos a todo el país. Los costos se calculan según la localidad de destino.</br></p>
-            </ul>
+            <div class="faq-item">
+                <p><strong>¿Cómo realizo un pedido?</strong> Podés contactarnos vía WhatsApp por el modelo que te interese.</p>
+            </div>
+            <div class="faq-item">
+                <p><strong>¿Medida especial?</strong> ¡Claro! Trabajamos a pedido. Envianos las medidas por WhatsApp para un presupuesto personalizado.</p>
+            </div>
+            <div class="faq-item">
+                <p><strong>¿Hacen envíos?</strong> Sí, realizamos envíos a todo el país. Los costos se calculan según la localidad de destino.</p>
+            </div>
         </div>
-        <div class="footer-links">
+
+        <div class="footer-contact-column">
             <h4>Contacto</h4>
-            <ul>
-                <li><a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank">WhatsApp</a></li>
-                <li><a href="mailto:velvetinohome@gmail.com">Email</a></li>
-            </ul>
-        </div>
-        <div class="copyright">
-            © 2026 velvetino home. Todos los derechos reservados. | Diseño y desarrollo independiente.
+            <div class="footer-contact-links">
+                <a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank">whatsapp</a>
+                <a href="mailto:velvetinohome@gmail.com">email</a>
+            </div>
         </div>
     </footer>
-
     <script>
         const productos = [
             {
