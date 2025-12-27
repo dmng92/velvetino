@@ -32,39 +32,39 @@
         }
 
         /* --- BARRA MÓVIL (MARQUEE INFINITO) --- */
-        .marquee-container {
-            width: 100%;
-            background-color: transparent;
-            color: var(--text-primary);
-            overflow: hidden;
-            white-space: nowrap;
-            display: flex; 
-            align-items: center;
-            padding: 2.8px 0;
-            border-bottom: 1px solid var(--border-color);
-            position: relative;
-            z-index: 1000;
-        }
+/* --- BARRA MÓVIL (MARQUEE INFINITO) --- */
+.marquee-container {
+    width: 100%;
+    background-color: transparent;
+    color: var(--text-primary);
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex; 
+    align-items: center;
+    padding: 2.8px 0; /* Altura pequeña y elegante */
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+    z-index: 1000;
+}
 
-        .marquee-content {
-            display: inline-flex;
-            animation: marquee-infinite 30s linear infinite;
-            will-change: transform;
-        }
+.marquee-content {
+    display: inline-flex; /* Cambiado a inline-flex para asegurar que los hijos se alineen bien */
+    animation: marquee-infinite 30s linear infinite;
+    will-change: transform; /* Ayuda al navegador a suavizar el movimiento */
+}
 
-        .marquee-content span {
-            font-size: 0.65rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            padding-right: 60px;
-        }
+.marquee-content span {
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding-right: 60px; /* Espacio generoso entre frases */
+}
 
-        @keyframes marquee-infinite {
-            from { transform: translateX(0); }
-            to { transform: translateX(-50%); }
-        }
-
+@keyframes marquee-infinite {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); } /* Mueve exactamente la mitad del bloque duplicado */
+}
         /* --- ESTRUCTURA GENERAL --- */
         .main-wrapper {
             padding: 40px 5%;
@@ -92,7 +92,7 @@
         .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
         /* --- GALERÍA Y DETALLES --- */
-        #product-detail, #nosotros-view, #faq-view { 
+        #product-detail { 
             display: none; 
             margin-bottom: 80px;
             border-bottom: 1px solid var(--border-color);
@@ -101,8 +101,8 @@
         #product-detail.active { display: block; }
 
         #gallery { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
+            display: grid !important; 
+            grid-template-columns: repeat(4, 1fr) !important; 
             gap: 40px 20px; 
             margin-top: 50px;
         }
@@ -136,7 +136,7 @@
         .footer-links h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
         .footer-links ul { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.3s; cursor: pointer; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
         .footer-links a:hover { color: var(--text-primary); }
         .copyright {
             grid-column: 1 / -1;
@@ -147,12 +147,12 @@
         }
 
         @media (max-width: 1024px) {
-            #gallery { grid-template-columns: repeat(2, 1fr); }
+            #gallery { grid-template-columns: repeat(2, 1fr) !important; }
             footer { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 600px) {
-            #gallery { grid-template-columns: 1fr; }
+            #gallery { grid-template-columns: 1fr !important; }
             footer { grid-template-columns: 1fr; text-align: center; }
             .footer-brand p { margin: 0 auto; }
         }
@@ -181,7 +181,6 @@
                     <span>☾</span>
                 </div>
                 <div class="nav-links">
-                    <a href="#" onclick="irANosotros()">sobre nosotros</a>
                     <a href="https://api.whatsapp.com/send/?phone=5493804595851&text&type=phone_number&app_absent=0" target="_blank">whatsapp</a>
                 </div>
             </nav>
@@ -190,23 +189,6 @@
         <main id="product-detail">
             <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
             <div id="detail-content"></div>
-        </main>
-
-        <main id="nosotros-view">
-            <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
-            <div class="detail-info">
-                <h2>Sobre Nosotros</h2>
-                <p>Texto de prueba: Somos un taller artesanal en Córdoba dedicado a la creación de almohadones que combinan diseño y confort. Cada pieza es única y hecha a mano.</p>
-            </div>
-        </main>
-
-        <main id="faq-view">
-            <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
-            <div class="detail-info">
-                <h2>Preguntas Frecuentes</h2>
-                <p><strong>¿Cómo realizo un pedido?</strong><br>Puedes contactarnos vía WhatsApp con las medidas de tu preferencia.</p>
-                <p><strong>¿Hacen envíos?</strong><br>Sí, enviamos a todo el país desde Córdoba Capital.</p>
-            </div>
         </main>
 
         <main id="gallery"></main>
@@ -220,9 +202,9 @@
         <div class="footer-links">
             <h4>Navegación</h4>
             <ul>
-                <li><a onclick="irAHome()">Catálogo</a></li>
-                <li><a onclick="irANosotros()">Sobre nosotros</a></li>
-                <li><a onclick="irAFaq()">Preguntas frecuentes</a></li>
+                <li><a href="#" onclick="irAHome()">Catálogo</a></li>
+                <li><a href="#">Sobre nosotros</a></li>
+                <li><a href="#">Preguntas frecuentes</a></li>
             </ul>
         </div>
         <div class="footer-links">
@@ -301,29 +283,15 @@
         const galleryView = document.getElementById('gallery');
         const detailView = document.getElementById('product-detail');
         const detailContent = document.getElementById('detail-content');
-        const nosotrosView = document.getElementById('nosotros-view');
-        const faqView = document.getElementById('faq-view');
 
         function render() {
             const params = new URLSearchParams(window.location.search);
             const productId = params.get('p');
-            const view = params.get('view');
-
-            // Reset de vistas
-            galleryView.style.display = 'none';
-            detailView.classList.remove('active');
-            nosotrosView.style.display = 'none';
-            faqView.style.display = 'none';
-
+            mostrarGaleria();
             if (productId) {
                 mostrarDetalle(productId);
-            } else if (view === 'nosotros') {
-                nosotrosView.style.display = 'block';
-            } else if (view === 'faq') {
-                faqView.style.display = 'block';
             } else {
-                galleryView.style.display = 'grid';
-                mostrarGaleria();
+                detailView.classList.remove('active');
             }
         }
 
@@ -339,18 +307,51 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function irANosotros() {
-            window.history.pushState({}, '', '?view=nosotros');
-            render();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function irAFaq() {
-            window.history.pushState({}, '', '?view=faq');
-            render();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
         function mostrarGaleria() {
             if (galleryView.innerHTML !== '') return;
-            productos
+            productos.forEach((prod, index) => {
+                const item = document.createElement('div');
+                item.className = 'item';
+                const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
+                item.innerHTML = `
+                    <div class="img-container">
+                        <img src="${fotoPortada}" alt="${prod.nombre}" loading="lazy">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-title">${prod.nombre}</div>
+                    </div>
+                `;
+                item.onclick = () => irAProducto(prod.id);
+                galleryView.appendChild(item);
+                setTimeout(() => item.classList.add('visible'), 100 * index);
+            });
+        }
+
+        function mostrarDetalle(id) {
+            const prod = productos.find(p => p.id === id);
+            if (!prod) return irAHome();
+            detailView.classList.add('active');
+            detailContent.innerHTML = `
+                <div class="detail-info">
+                    <h2>${prod.nombre}</h2>
+                    <p>${prod.descripcion}</p>
+                </div>
+                <div class="detail-grid">
+                    ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
+                </div>
+            `;
+        }
+
+        const btnToggle = document.getElementById('theme-toggle');
+        btnToggle.addEventListener('click', () => {
+            let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+        });
+        if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
+
+        window.onpopstate = render;
+        window.onload = render;
+    </script>
+</body>
+</html>
