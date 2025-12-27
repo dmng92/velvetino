@@ -99,6 +99,13 @@
         .item:hover img { transform: scale(1.05); }
 
         /* Estilos de Texto para Secciones */
+        .item { opacity: 0; transform: translateY(20px); transition: 0.8s; cursor: pointer; }
+        .item.visible { opacity: 1; transform: translateY(0); }
+        .img-container { width: 100%; aspect-ratio: 1 / 1; background-color: var(--item-bg); overflow: hidden; }
+        .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+        .item:hover img { transform: scale(1.05); }
+        .item-info { margin-top: 12px; }
+        .item-title { font-weight: 600; font-size: 0.9rem; }
         .section-content { max-width: 800px; line-height: 1.8; margin-top: 40px; }
         .section-content h2 { font-size: 2rem; margin-bottom: 30px; }
         .faq-item { margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; }
@@ -173,7 +180,7 @@
     <footer>
         <div>
             <h3>velvetino home©</h3>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">Almohadones artesanos hechos en Córdoba.</p>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Especialistas en almohadones a medida y confort para cada rincón de tu casa. Hecho a mano en Córdoba, Argentina.</p>
         </div>
         <div class="footer-links">
             <h4>Navegación</h4>
@@ -187,7 +194,7 @@
             <h4>Contacto</h4>
             <ul>
                 <li><a href="https://api.whatsapp.com/send/?phone=5493804595851" target="_blank">WhatsApp</a></li>
-                <li><a>Instagram</a></li>
+                <li><a href="mailto:velvetinohome@gmail.com">Email</a></li>
             </ul>
         </div>
     </footer>
