@@ -1,267 +1,525 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>velvetino home©</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
+
         :root {
+
             --bg-color: #ffffff;
+
             --text-primary: #000000;
+
             --text-secondary: #666666;
+
             --border-color: #000000;
+
             --item-bg: #f9f9f9;
+
         }
+
+
 
         [data-theme="dark"] {
+
             --bg-color: #0c0c0c;
+
             --text-primary: #ffffff;
+
             --text-secondary: #999999;
+
             --border-color: #333333;
+
             --item-bg: #1a1a1a;
+
         }
+
+
 
         body {
+
             margin: 0;
+
             padding: 40px 5%;
+
             font-family: 'Inter', sans-serif;
+
             background-color: var(--bg-color);
+
             color: var(--text-primary);
+
             transition: background-color 0.4s ease, color 0.4s ease;
+
         }
+
+
 
         header { margin-bottom: 50px; }
+
         h1 { font-size: 2.2rem; font-weight: 600; margin: 0; letter-spacing: -0.02em; cursor: pointer; }
+
         .tagline { font-size: 1rem; color: var(--text-secondary); margin-top: 8px; }
 
+
+
         nav {
+
             display: flex;
+
             justify-content: space-between;
+
             align-items: center;
+
             border-top: 1px solid var(--border-color);
+
             border-bottom: 1px solid var(--border-color);
+
             padding: 12px 0;
+
             margin-top: 30px;
+
         }
 
+
+
         .theme-switch { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.85rem; user-select: none; }
+
         .switch-track { width: 40px; height: 20px; background-color: var(--text-primary); border-radius: 20px; position: relative; transition: 0.3s; }
+
         .switch-circle { width: 14px; height: 14px; background-color: var(--bg-color); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.3s; }
+
         [data-theme="dark"] .switch-circle { left: 23px; }
+
+
 
         .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
+
+
         /* --- CONTENEDORES --- */
+
         #product-detail { 
+
             display: none; 
+
             margin-bottom: 80px; /* Espacio para separar del catálogo */
+
             border-bottom: 1px solid var(--border-color);
+
             padding-bottom: 60px;
+
         }
+
         #product-detail.active { display: block; }
 
+
+
         #gallery { 
+
             display: grid !important; 
+
             grid-template-columns: repeat(4, 1fr) !important; 
+
             gap: 40px 20px; 
+
             margin-top: 50px;
+
         }
 
+
+
         /* --- ESTILOS DE ITEMS --- */
+
         .item { opacity: 0; transform: translateY(20px); transition: 0.8s; cursor: pointer; }
+
         .item.visible { opacity: 1; transform: translateY(0); }
+
         .img-container { width: 100%; aspect-ratio: 1 / 1; background-color: var(--item-bg); overflow: hidden; }
+
         .item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+
         .item:hover img { transform: scale(1.05); }
+
         .item-info { margin-top: 12px; }
+
         .item-title { font-weight: 600; font-size: 0.9rem; }
-        .item-price { font-size: 0.85rem; color: var(--text-secondary); }
+
 
 
         /* --- DETALLE DE PRODUCTO --- */
+
         .back-link { cursor: pointer; text-decoration: underline; font-size: 0.9rem; display: block; margin-bottom: 30px; }
+
         .detail-info h2 { font-size: 2.2rem; margin: 0 0 15px 0; font-weight: 600; }
+
         .detail-info p { color: var(--text-secondary); max-width: 800px; line-height: 1.6; margin-bottom: 40px; }
+
         .detail-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+
         .detail-grid img { width: 100%; height: auto; }
 
+
+
         @media (max-width: 1024px) {
+
             #gallery { grid-template-columns: repeat(2, 1fr) !important; }
+
         }
+
+
 
         @media (max-width: 600px) {
+
             #gallery { grid-template-columns: 1fr !important; }
+
             body { padding: 20px; }
+
         }
+
     </style>
+
 </head>
+
 <body>
 
+
+
     <header>
+
         <h1 onclick="irAHome()">velvetino home©</h1>
+
         <div class="tagline">almohadones y estilo para tu hogar.</div>
+
         <nav>
+
             <div class="theme-switch" id="theme-toggle">
+
                 <span>☼</span>
+
                 <div class="switch-track"><div class="switch-circle"></div></div>
+
                 <span>☾</span>
+
             </div>
+
             <div class="nav-links">
+
                 <a href="https://api.whatsapp.com/send/?phone=5493804595851&text&type=phone_number&app_absent=0">whatsapp</a>
+
             </div>
+
         </nav>
+
     </header>
 
+
+
     <main id="product-detail">
+
         <span class="back-link" onclick="irAHome()">← volver al catálogo</span>
+
         <div id="detail-content"></div>
+
     </main>
+
+
 
     <main id="gallery"></main>
 
+
+
     <script>
+
         const productos = [
+
                         {
+
                 id: "almohadon-de-piso",
+
                 nombre: "Almohadones de piso",
+
                 descripcion: "Almohadón/sillón de piso. ideal para sentarse-acostarse a leer. Confeccionado con tela pana color oliva. Medidas 1.40x 65cm. También realizo pedidos del tamaño y color que te guste.",
+
                 carpeta: "Almohadones-de-piso",
+
                 fotos: ["foto (3).jpg", "foto (2).jpg", "foto (1).jpg", "foto (4).jpg", "foto (5).jpg", "muestrario-pana-jaguar.jpg"] 
+
             },
+
             {
+
                 id: "set-jardin-camastro",
+
                 nombre: "Almohadón Terciopelo",
+
                 descripcion: "Set de almohadones para exterior/jardin o camastro. Confeccionado en tela Panamá (apto exterior). Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto. Córdoba Capital.",
+
                 carpeta: "set-almohadones-jardín-camastro-estilo-futon",
+
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
+
             },
+
             {
+
                 id: "almohadon-sillon",
+
                 nombre: "Almohadón-sillón",
+
                 descripcion: "Almohadon, sillon para poner en camastro, piso, jardín, el uso que vos prefieras. confeccionado con tela antidesgarro color gris petróleo. medidas 1.20x70 cm. también realizo pedidos en la medida y color que te guste :) consúltame!",
+
                 carpeta: "almohadon-sillon",
+
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "muestrario-pana-jaguar.jpg"] 
+
             },
+
             {
+
                 id: "sillon-de-piso-oliva",
+
                 nombre: "Almohadón-sillón de piso",
+
                 descripcion: "Almohadon para living/jardin, confeccionado en pana premium color verde oliva. Medidas 1.40x70cm. Realizo pedidos en telas para exterior o interior del tamaño y color que prefieras. Córdoba Capital.",
+
                 carpeta: "almohadon- sillon de piso",
+
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg"] 
+
             },
+
             {
+
                 id: "almohadones-para-sillas-acapulco-o-asientos",
+
                 nombre: "Almohadones para sillas acapulco o asientos",
+
                 descripcion: "Almohadones para sillas medidas 85x60 ideales para silla Acapulco o cualquier silla. Realizamos por pedido! Consultar por colores. CORDOBA CAPITAL",
+
                 carpeta: "Almohadones-para-sillas-acapulco-o-asientos",
+
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg"] 
+
             },
 
+
+
             {
+
                 id: "almohadon-estilo-futon-individual-o-set",
+
                 nombre: "Almohadón estilo futón individual o set",
+
                 descripcion: "Almohadones estilo futón para piso/camastro, set de jardín etc. confeccionados en tela pana antimanchas de la medida y color que desees. Trabajamos por pedido :) ENVIAR MEDIDAS EN CM PARA PODER PASAR UN PRESUPUESTO!! consúltame! (CÓRDOBA CAPITAL)",
+
                 carpeta: "almohadon-estilo-futon-individual-o-set",
+
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "muestrario-pana-jaguar.jpg", "muestrario-pana-jaguar-2.jpg"] 
+
+            },
+
+
+
+            {
+
+                id: "set-almohadones-camastro-estilo-futon",
+
+                nombre: "Set almohadones camastro estilo futón",
+
+                descripcion: "Set de almohadones para exterior/jardin o camastro. confeccionado en tela Panamá(apto exterior) Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto :) CÓRDOBA",
+
+                carpeta: "set-almohadones-camastro-estilo-futon",
+
+                fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
+
             },
 
             {
-                id: "set-almohadones-camastro-estilo-futon",
-                nombre: "Set almohadones camastro estilo futón",
-                descripcion: "Set de almohadones para exterior/jardin o camastro. confeccionado en tela Panamá(apto exterior) Trabajamos a medida. Envíame las tuyas para pasarte un presupuesto :) CÓRDOBA",
-                carpeta: "set-almohadones-camastro-estilo-futon",
-                fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "foto (5).jpg", "foto (6).jpg", "foto (7).jpg"] 
-            },
-            {
+
                 id: "set-almohadones-sillones-futon",
+
                 nombre: "SET ALMOHADONES SILLONES FUTON",
-                precio: "$",
+
                 descripcion: "Set almohadones estilo futón. confeccionado en tela pana antimanchas. ENVIAME LA MEDIDA DESEADA PARA BRINDARTE UN PRESUPUESTO!! TRABAJAMOS POR PEDIDO!! Apto para armar un living, camastro, lo que vos prefieras! realizo a medida de colores y tamaños distintos. consultame :)",
+
                 carpeta: "set-almohadones-sillones-futon",
+
                 fotos: ["foto (1).jpg", "foto (2).jpg", "foto (3).jpg", "foto (4).jpg", "muestrario-pana-jaguar.jpg"] 
+
             }
+
         ];
 
+
+
         const rutaBase = 'fotos/';
+
         const galleryView = document.getElementById('gallery');
+
         const detailView = document.getElementById('product-detail');
+
         const detailContent = document.getElementById('detail-content');
 
+
+
         function render() {
+
             const params = new URLSearchParams(window.location.search);
+
             const productId = params.get('p');
+
             
+
             mostrarGaleria(); // La galería siempre se carga
+
             
+
             if (productId) {
+
                 mostrarDetalle(productId);
+
             } else {
+
                 detailView.classList.remove('active');
+
             }
+
         }
+
+
 
         function irAHome() {
+
             window.history.pushState({}, '', window.location.pathname);
+
             render();
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
         }
+
+
 
         function irAProducto(id) {
+
             window.history.pushState({}, '', `?p=${id}`);
+
             render();
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
         }
+
+
 
         function mostrarGaleria() {
+
             if (galleryView.innerHTML !== '') return; // Evitar recargar si ya existe
+
             
+
             productos.forEach((prod, index) => {
+
                 const item = document.createElement('div');
+
                 item.className = 'item';
+
                 const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
 
+
+
                 item.innerHTML = `
+
                     <div class="img-container">
+
                         <img src="${fotoPortada}" alt="${prod.nombre}" loading="lazy">
+
                     </div>
+
                     <div class="item-info">
+
                         <div class="item-title">${prod.nombre}</div>
-                        <div class="item-price">${prod.precio}</div>
+
                     </div>
+
                 `;
+
                 item.onclick = () => irAProducto(prod.id);
+
                 galleryView.appendChild(item);
+
                 setTimeout(() => item.classList.add('visible'), 100 * index);
+
             });
+
         }
+
+
 
         function mostrarDetalle(id) {
+
             const prod = productos.find(p => p.id === id);
+
             if (!prod) return irAHome();
 
+
+
             detailView.classList.add('active');
+
             detailContent.innerHTML = `
+
                 <div class="detail-info">
+
                     <h2>${prod.nombre}</h2>
+
                     <p>${prod.descripcion}</p>
+
                 </div>
+
                 <div class="detail-grid">
+
                     ${prod.fotos.map(f => `<img src="${rutaBase}${prod.carpeta}/${f}" alt="Detalle">`).join('')}
+
                 </div>
+
             `;
+
         }
 
+
+
         const btnToggle = document.getElementById('theme-toggle');
+
         btnToggle.addEventListener('click', () => {
+
             let theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+
             document.documentElement.setAttribute('data-theme', theme);
+
             localStorage.setItem('theme', theme);
+
         });
+
         if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
+
+
         window.onpopstate = render;
+
         window.onload = render;
+
     </script>
+
 </body>
+
 </html>
