@@ -38,17 +38,18 @@
         /* --- BARRA MÓVIL (MARQUEE) --- */
         .marquee-container {
             width: 100%;
-            background-color: var(--marquee-bg);
-            color: var(--marquee-text);
+            background-color: transparent;
+            color: var(--text-primary);
             overflow: hidden;
             white-space: nowrap;
             display: flex; 
             align-items: center;
             padding: 2.8px 0;
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
             z-index: 1000;
+            transition: color 0.4s ease, border-color 0.4s ease;
         }
 
         .marquee-content {
