@@ -94,9 +94,11 @@
       /* --- CARRUSEL ACTUALIZADO --- */
         .hero-carousel {
             width: 100%;
-            overflow-x: hidden; /* Evita que se vea el scroll */
+            overflow-x: auto; /* Evita que se vea el scroll */
             margin: 40px 0;
             position: relative;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
             /* Eliminamos el cursor grab ya que ahora es por posición */
         }
         
@@ -106,8 +108,7 @@
             display: flex;
             gap: 20px;
             width: max-content;
-            transition: transform 0.1s linear; /* Suaviza el movimiento por JS */
-            will-change: transform;
+            cursor: pointer;
         }
 
         .carousel-track:hover {
@@ -119,7 +120,6 @@
             aspect-ratio: 4/5;
             flex-shrink: 0;
             background-color: var(--item-bg);
-            cursor: pointer;
             overflow: hidden;
         }
 
@@ -210,7 +210,7 @@
         @media (max-width: 1024px) {
             .hero-carousel {
                 overflow-x: auto;
-                scroll-behavior: smooth;
+                scroll-behavior: auto;
             }
             .hero-carousel::-webkit-scrollbar { display: none; }
         }
@@ -360,55 +360,73 @@
 let currentScroll = 0;
     let scrollInterval;
 
+    let autoScrollSpeed = 1; // Velocidad del movimiento (píxeles por frame)
+    let isInteracting = false;
+    let autoScrollInterval;
+    let resumeTimeout;
+
     function inicializarCarrusel() {
         if (carouselTrack.innerHTML !== '') return;
         
-        // 1. Filtrar fotos y elegir 9 aleatorias (una por producto o hasta completar 9)
-        let fotosParaCarrusel = [];
+        // 1. Selección de 9 fotos aleatorias (excluyendo muestrarios)
+        let fotosDisponibles = [];
         productos.forEach(prod => {
-            const fotosValidas = prod.fotos.filter(f => !f.toLowerCase().includes('muestrario'));
-            if (fotosValidas.length > 0) {
-                const randomFoto = fotosValidas[Math.floor(Math.random() * fotosValidas.length)];
-                fotosParaCarrusel.push({ id: prod.id, foto: `${rutaBase}${prod.carpeta}/${randomFoto}`, nombre: prod.nombre });
-            }
+            const filtradas = prod.fotos.filter(f => !f.toLowerCase().includes('muestrario'));
+            filtradas.forEach(f => fotosDisponibles.push({ id: prod.id, src: `${rutaBase}${prod.carpeta}/${f}`, nombre: prod.nombre }));
         });
 
-        // Limitamos a 9 fotos exactas y sin duplicar para evitar el vacío infinito
-        const seleccionFinal = fotosParaCarrusel.slice(0, 9);
+        // Mezclar y tomar 9
+        const seleccionFinal = fotosDisponibles.sort(() => 0.5 - Math.random()).slice(0, 9);
 
         carouselTrack.innerHTML = seleccionFinal.map(item => `
             <div class="carousel-item" onclick="irAProducto('${item.id}')">
-                <img src="${item.foto}" alt="${item.nombre}">
+                <img src="${item.src}" alt="${item.nombre}" style="width:100%; height:100%; object-fit:cover;">
             </div>
         `).join('');
 
-        // 2. Lógica para PC: Movimiento por posición de cursor (25% laterales)
-        if (window.innerWidth > 1024) {
-            heroCarousel.addEventListener('mousemove', (e) => {
-                const rect = heroCarousel.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const width = rect.width;
-                const speed = 5; // Ajusta la velocidad aquí
+        // 2. Iniciar movimiento automático
+        startAutoScroll();
 
-                clearInterval(scrollInterval);
+        // 3. Detectar interacción para pausar y reanudar
+        const pausar = () => {
+            isInteracting = true;
+            stopAutoScroll();
+            clearTimeout(resumeTimeout);
+        };
 
-                if (x < width * 0.25) {
-                    // Zona Izquierda: Mover hacia atrás
-                    scrollInterval = setInterval(() => {
-                        heroCarousel.scrollLeft -= speed;
-                    }, 16);
-                } else if (x > width * 0.75) {
-                    // Zona Derecha: Mover hacia adelante
-                    scrollInterval = setInterval(() => {
-                        heroCarousel.scrollLeft += speed;
-                    }, 16);
-                }
-            });
+        const reanudar = () => {
+            isInteracting = false;
+            // Espera 2 segundos de inactividad antes de retomar el movimiento
+            resumeTimeout = setTimeout(startAutoScroll, 2000);
+        };
 
-            heroCarousel.addEventListener('mouseleave', () => {
-                clearInterval(scrollInterval);
-            });
-        }
+        // Eventos para PC y Celular
+        heroCarousel.addEventListener('mousedown', pausar);
+        heroCarousel.addEventListener('touchstart', pausar, {passive: true});
+        window.addEventListener('mouseup', reanudar);
+        window.addEventListener('touchend', reanudar);
+        
+        // Pausa también si el mouse está encima (opcional, para lectura cómoda)
+        heroCarousel.addEventListener('mouseenter', stopAutoScroll);
+        heroCarousel.addEventListener('mouseleave', () => { if(!isInteracting) startAutoScroll(); });
+    }
+
+    function startAutoScroll() {
+        stopAutoScroll(); // Limpiar cualquier intervalo previo
+        autoScrollInterval = setInterval(() => {
+            const maxScroll = heroCarousel.scrollWidth - heroCarousel.clientWidth;
+            
+            // Si llega al final, vuelve al principio o puedes invertir la dirección
+            if (heroCarousel.scrollLeft >= maxScroll) {
+                heroCarousel.scrollLeft = 0; 
+            } else {
+                heroCarousel.scrollLeft += autoScrollSpeed;
+            }
+        }, 30); // Frecuencia de actualización (ms)
+    }
+
+    function stopAutoScroll() {
+        clearInterval(autoScrollInterval);
     }
 
     function render() {
