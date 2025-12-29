@@ -292,7 +292,7 @@
         }
 
         const pausar = () => { isInteracting = true; stopAutoScroll(); clearTimeout(resumeTimeout); };
-        const reanudar = () => { isInteracting = false; resumeTimeout = setTimeout(() => startAutoScroll(autoScrollSpeed, 'right'), 1000); };
+        const reanudar = () => { isInteracting = false; resumeTimeout = setTimeout(() => startAutoScroll(autoScrollSpeed, 'right'), 300); };
         heroCarousel.ontouchstart = pausar;
         window.ontouchend = reanudar;
     }
