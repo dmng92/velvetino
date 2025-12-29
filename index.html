@@ -94,16 +94,22 @@
         /* --- CARRUSEL AUTOMÁTICO LENTO --- */
         .hero-carousel {
             width: 100%;
-            overflow: hidden;
+            overflow-x: auto; /* Cambiado de hidden a auto para permitir scroll */
             margin: 40px 0;
             position: relative;
+            cursor: grab;
+            scrollbar-width: none; /* Oculta barra en Firefox */
         }
+        
+        .hero-carousel::-webkit-scrollbar { display: none; } /* Oculta barra en Chrome/Safari */
 
         .carousel-track {
             display: flex;
             gap: 20px;
             animation: scroll-carousel 120s linear infinite; /* Movimiento muy lento */
             width: max-content;
+            will-change: transform; /* Mejora el rendimiento al moverlo */
+            user-select: none; /* Evita seleccionar texto al arrastrar */
         }
 
         .carousel-track:hover {
@@ -461,6 +467,52 @@ function inicializarCarrusel() {
     if (localStorage.getItem('theme')) document.documentElement.setAttribute('data-theme', localStorage.getItem('theme'));
 
     window.onpopstate = render;
+// --- LÓGICA DE ARRASTRE PARA EL CARRUSEL ---
+let isDown = false;
+let startX;
+let scrollLeft;
+
+const slider = document.getElementById('hero-carousel');
+const track = document.getElementById('carousel-track');
+
+// Eventos de Mouse
+slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.style.cursor = 'grabbing';
+    track.style.animationPlayState = 'paused'; // Pausa la auto-animación al tocar
+    startX = e.pageX - slider.offsetLeft;
+    scrollLeft = slider.scrollLeft;
+});
+
+slider.addEventListener('mouseleave', () => {
+    isDown = false;
+    slider.style.cursor = 'grab';
+    track.style.animationPlayState = 'running'; // Reanuda si sale el mouse
+});
+
+slider.addEventListener('mouseup', () => {
+    isDown = false;
+    slider.style.cursor = 'grab';
+    track.style.animationPlayState = 'running'; // Reanuda al soltar
+});
+
+slider.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startX) * 2; // Velocidad de arrastre
+    slider.scrollLeft = scrollLeft - walk;
+});
+
+// Eventos Táctiles (Celulares)
+slider.addEventListener('touchstart', () => {
+    track.style.animationPlayState = 'paused';
+});
+
+slider.addEventListener('touchend', () => {
+    track.style.animationPlayState = 'running';
+});
+    
     window.onload = render;
 </script>
 </body>
