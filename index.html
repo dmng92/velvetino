@@ -92,23 +92,22 @@
         .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
       /* --- CARRUSEL ACTUALIZADO --- */
-        .hero-carousel {
+       .hero-carousel {
             width: 100%;
-            overflow-x: auto; /* Evita que se vea el scroll */
+            overflow-x: auto;
             margin: 40px 0;
             position: relative;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE/Edge */
-            /* Eliminamos el cursor grab ya que ahora es por posición */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+            cursor: default;
         }
         
-        .hero-carousel::-webkit-scrollbar { display: none; } /* Oculta barra en Chrome/Safari */
+        .hero-carousel::-webkit-scrollbar { display: none; }
 
         .carousel-track {
             display: flex;
             gap: 20px;
             width: max-content;
-            cursor: pointer;
         }
 
         .carousel-track:hover {
@@ -121,6 +120,7 @@
             flex-shrink: 0;
             background-color: var(--item-bg);
             overflow: hidden;
+            cursor: pointer;
         }
 
         .carousel-item img {
@@ -365,17 +365,21 @@ let currentScroll = 0;
     let autoScrollInterval;
     let resumeTimeout;
 
+ let autoScrollSpeed = 1;      // Velocidad lenta por defecto
+    let fastScrollSpeed = 6;      // Velocidad rápida al poner el cursor en los bordes
+    let autoScrollInterval;
+    let isInteracting = false;    // Para saber si el usuario está tocando en celular
+    let resumeTimeout;
+
     function inicializarCarrusel() {
         if (carouselTrack.innerHTML !== '') return;
         
-        // 1. Selección de 9 fotos aleatorias (excluyendo muestrarios)
+        // 1. Filtrado de fotos (9 fotos aleatorias, sin muestrarios)
         let fotosDisponibles = [];
         productos.forEach(prod => {
             const filtradas = prod.fotos.filter(f => !f.toLowerCase().includes('muestrario'));
             filtradas.forEach(f => fotosDisponibles.push({ id: prod.id, src: `${rutaBase}${prod.carpeta}/${f}`, nombre: prod.nombre }));
         });
-
-        // Mezclar y tomar 9
         const seleccionFinal = fotosDisponibles.sort(() => 0.5 - Math.random()).slice(0, 9);
 
         carouselTrack.innerHTML = seleccionFinal.map(item => `
@@ -384,45 +388,70 @@ let currentScroll = 0;
             </div>
         `).join('');
 
-        // 2. Iniciar movimiento automático
-        startAutoScroll();
+        // 2. Iniciar movimiento automático base
+        startAutoScroll(autoScrollSpeed, 'right');
 
-        // 3. Detectar interacción para pausar y reanudar
-        const pausar = () => {
+        // 3. LÓGICA PARA PC: ACELERACIÓN POR POSICIÓN
+        if (window.innerWidth > 1024) {
+            heroCarousel.addEventListener('mousemove', (e) => {
+                const rect = heroCarousel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+
+                if (x < width * 0.25) {
+                    // 25% Izquierdo: Acelerar a la izquierda
+                    startAutoScroll(fastScrollSpeed, 'left');
+                } else if (x > width * 0.75) {
+                    // 25% Derecho: Acelerar a la derecha
+                    startAutoScroll(fastScrollSpeed, 'right');
+                } else {
+                    // Zona central: Volver a velocidad lenta
+                    startAutoScroll(autoScrollSpeed, 'right');
+                }
+            });
+
+            heroCarousel.addEventListener('mouseleave', () => {
+                if (!isInteracting) startAutoScroll(autoScrollSpeed, 'right');
+            });
+        }
+
+        // 4. LÓGICA PARA CELULAR (Mantener interacción manual)
+        const pausarInteraccion = () => {
             isInteracting = true;
             stopAutoScroll();
             clearTimeout(resumeTimeout);
         };
 
-        const reanudar = () => {
+        const reanudarInteraccion = () => {
             isInteracting = false;
-            // Espera 2 segundos de inactividad antes de retomar el movimiento
-            resumeTimeout = setTimeout(startAutoScroll, 2000);
+            resumeTimeout = setTimeout(() => startAutoScroll(autoScrollSpeed, 'right'), 2000);
         };
 
-        // Eventos para PC y Celular
-        heroCarousel.addEventListener('mousedown', pausar);
-        heroCarousel.addEventListener('touchstart', pausar, {passive: true});
-        window.addEventListener('mouseup', reanudar);
-        window.addEventListener('touchend', reanudar);
-        
-        // Pausa también si el mouse está encima (opcional, para lectura cómoda)
-        heroCarousel.addEventListener('mouseenter', stopAutoScroll);
-        heroCarousel.addEventListener('mouseleave', () => { if(!isInteracting) startAutoScroll(); });
+        heroCarousel.addEventListener('mousedown', pausarInteraccion);
+        heroCarousel.addEventListener('touchstart', pausarInteraccion, {passive: true});
+        window.addEventListener('mouseup', reanudarInteraccion);
+        window.addEventListener('touchend', reanudarInteraccion);
     }
 
-    function startAutoScroll() {
-        stopAutoScroll(); // Limpiar cualquier intervalo previo
+    function startAutoScroll(speed, direction) {
+        stopAutoScroll(); 
         autoScrollInterval = setInterval(() => {
             const maxScroll = heroCarousel.scrollWidth - heroCarousel.clientWidth;
             
-            // Si llega al final, vuelve al principio o puedes invertir la dirección
-            if (heroCarousel.scrollLeft >= maxScroll) {
-                heroCarousel.scrollLeft = 0; 
+            if (direction === 'right') {
+                if (heroCarousel.scrollLeft >= maxScroll) {
+                    heroCarousel.scrollLeft = 0; // Reinicio infinito
+                } else {
+                    heroCarousel.scrollLeft += speed;
+                }
             } else {
-                heroCarousel.scrollLeft += autoScrollSpeed;
+                if (heroCarousel.scrollLeft <= 0) {
+                    heroCarousel.scrollLeft = maxScroll; // Reinicio infinito hacia atrás
+                } else {
+                    heroCarousel.scrollLeft -= speed;
+                }
             }
-        }, 30); // Frecuencia de actualización (ms)
+        }, 20); // Fluidez de 50fps
     }
 
     function stopAutoScroll() {
@@ -458,25 +487,28 @@ let currentScroll = 0;
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function mostrarGaleria() {
-        if (galleryView.innerHTML !== '') return;
-        productos.forEach((prod, index) => {
-            const item = document.createElement('div');
-            item.className = 'item';
-            const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
-            item.innerHTML = `
-                <div class="img-container">
-                    <img src="${fotoPortada}" alt="${prod.nombre}" loading="lazy">
-                </div>
-                <div class="item-info">
-                    <div class="item-title">${prod.nombre}</div>
-                </div>
-            `;
-            item.onclick = () => irAProducto(prod.id);
-            galleryView.appendChild(item);
-            setTimeout(() => item.classList.add('visible'), 100 * index);
-        });
-    }
+function mostrarGaleria() {
+    if (galleryView.innerHTML !== '') return;
+    productos.forEach((prod, index) => {
+        const item = document.createElement('div');
+        item.className = 'item';
+        const fotoPortada = `${rutaBase}${prod.carpeta}/${prod.fotos[0]}`;
+        
+        // --- CAMBIO DE ORDEN AQUÍ ---
+        item.innerHTML = `
+            <div class="item-info" style="margin-top: 0; margin-bottom: 12px;">
+                <div class="item-title">${prod.nombre}</div>
+            </div>
+            <div class="img-container">
+                <img src="${fotoPortada}" alt="${prod.nombre}" loading="lazy">
+            </div>
+        `;
+        
+        item.onclick = () => irAProducto(prod.id);
+        galleryView.appendChild(item);
+        setTimeout(() => item.classList.add('visible'), 100 * index);
+    });
+}
 
     function mostrarDetalle(id) {
         const prod = productos.find(p => p.id === id);
