@@ -91,14 +91,13 @@
 
         .nav-links a { color: var(--text-primary); text-decoration: none; margin-left: 20px; font-weight: 500; }
 
-        /* --- CARRUSEL AUTOMÁTICO LENTO --- */
+      /* --- CARRUSEL ACTUALIZADO --- */
         .hero-carousel {
             width: 100%;
-            overflow-x: auto; /* Cambiado de hidden a auto para permitir scroll */
+            overflow-x: hidden; /* Evita que se vea el scroll */
             margin: 40px 0;
             position: relative;
-            cursor: grab;
-            scrollbar-width: none; /* Oculta barra en Firefox */
+            /* Eliminamos el cursor grab ya que ahora es por posición */
         }
         
         .hero-carousel::-webkit-scrollbar { display: none; } /* Oculta barra en Chrome/Safari */
@@ -106,10 +105,9 @@
         .carousel-track {
             display: flex;
             gap: 20px;
-            animation: scroll-carousel 120s linear infinite; /* Movimiento muy lento */
             width: max-content;
-            will-change: transform; /* Mejora el rendimiento al moverlo */
-            user-select: none; /* Evita seleccionar texto al arrastrar */
+            transition: transform 0.1s linear; /* Suaviza el movimiento por JS */
+            will-change: transform;
         }
 
         .carousel-track:hover {
@@ -208,6 +206,15 @@
             text-align: center;
         }
 
+/* En celular mantenemos el comportamiento nativo de scroll */
+        @media (max-width: 1024px) {
+            .hero-carousel {
+                overflow-x: auto;
+                scroll-behavior: smooth;
+            }
+            .hero-carousel::-webkit-scrollbar { display: none; }
+        }
+        
         @media (max-width: 1024px) {
             #gallery { grid-template-columns: repeat(2, 1fr) !important; }
             footer { grid-template-columns: 1fr 1fr; }
@@ -350,28 +357,58 @@
     const carouselTrack = document.getElementById('carousel-track');
     const heroCarousel = document.getElementById('hero-carousel');
 
-function inicializarCarrusel() {
+let currentScroll = 0;
+    let scrollInterval;
+
+    function inicializarCarrusel() {
         if (carouselTrack.innerHTML !== '') return;
         
-        // Creamos una lista de items (una foto al azar por producto, excluyendo muestrarios)
-        const itemsHTML = productos.map(prod => {
-            // Filtramos las fotos para excluir los muestrarios
-            const fotosFiltradas = prod.fotos.filter(foto => 
-                !foto.toLowerCase().includes('muestrario')
-            );
+        // 1. Filtrar fotos y elegir 9 aleatorias (una por producto o hasta completar 9)
+        let fotosParaCarrusel = [];
+        productos.forEach(prod => {
+            const fotosValidas = prod.fotos.filter(f => !f.toLowerCase().includes('muestrario'));
+            if (fotosValidas.length > 0) {
+                const randomFoto = fotosValidas[Math.floor(Math.random() * fotosValidas.length)];
+                fotosParaCarrusel.push({ id: prod.id, foto: `${rutaBase}${prod.carpeta}/${randomFoto}`, nombre: prod.nombre });
+            }
+        });
 
-            // Si el producto tiene fotos que no son muestrarios, elegimos una al azar
-            const fotoSeleccionada = fotosFiltradas.length > 0 
-                ? fotosFiltradas[Math.floor(Math.random() * fotosFiltradas.length)]
-                : prod.fotos[0]; // Backup por si solo tiene muestrarios
+        // Limitamos a 9 fotos exactas y sin duplicar para evitar el vacío infinito
+        const seleccionFinal = fotosParaCarrusel.slice(0, 9);
 
-            return `<div class="carousel-item" onclick="irAProducto('${prod.id}')">
-                        <img src="${rutaBase}${prod.carpeta}/${fotoSeleccionada}" alt="${prod.nombre}">
-                    </div>`;
-        }).join('');
+        carouselTrack.innerHTML = seleccionFinal.map(item => `
+            <div class="carousel-item" onclick="irAProducto('${item.id}')">
+                <img src="${item.foto}" alt="${item.nombre}">
+            </div>
+        `).join('');
 
-        // Duplicamos el contenido para el efecto infinito suave
-        carouselTrack.innerHTML = itemsHTML + itemsHTML;
+        // 2. Lógica para PC: Movimiento por posición de cursor (25% laterales)
+        if (window.innerWidth > 1024) {
+            heroCarousel.addEventListener('mousemove', (e) => {
+                const rect = heroCarousel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const width = rect.width;
+                const speed = 5; // Ajusta la velocidad aquí
+
+                clearInterval(scrollInterval);
+
+                if (x < width * 0.25) {
+                    // Zona Izquierda: Mover hacia atrás
+                    scrollInterval = setInterval(() => {
+                        heroCarousel.scrollLeft -= speed;
+                    }, 16);
+                } else if (x > width * 0.75) {
+                    // Zona Derecha: Mover hacia adelante
+                    scrollInterval = setInterval(() => {
+                        heroCarousel.scrollLeft += speed;
+                    }, 16);
+                }
+            });
+
+            heroCarousel.addEventListener('mouseleave', () => {
+                clearInterval(scrollInterval);
+            });
+        }
     }
 
     function render() {
