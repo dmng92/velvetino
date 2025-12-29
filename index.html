@@ -102,7 +102,7 @@
         .carousel-track {
             display: flex;
             gap: 20px;
-            animation: scroll-carousel 60s linear infinite; /* Movimiento muy lento */
+            animation: scroll-carousel 120s linear infinite; /* Movimiento muy lento */
             width: max-content;
         }
 
@@ -131,8 +131,8 @@
         }
 
         @keyframes scroll-carousel {
-            from { transform: translateX(0); }
-            to { transform: translateX(calc(-50% - 10px)); }
+            from { transform: translateX(calc(-50% - 10px)); }
+            to { transform: translateX(0); }
         }
 
         /* --- GALERÍA Y DETALLES --- */
@@ -344,14 +344,23 @@
     const carouselTrack = document.getElementById('carousel-track');
     const heroCarousel = document.getElementById('hero-carousel');
 
-    function inicializarCarrusel() {
+function inicializarCarrusel() {
         if (carouselTrack.innerHTML !== '') return;
         
-        // Creamos una lista de items (una foto al azar por producto)
+        // Creamos una lista de items (una foto al azar por producto, excluyendo muestrarios)
         const itemsHTML = productos.map(prod => {
-            const fotoAleatoria = prod.fotos[Math.floor(Math.random() * prod.fotos.length)];
+            // Filtramos las fotos para excluir los muestrarios
+            const fotosFiltradas = prod.fotos.filter(foto => 
+                !foto.toLowerCase().includes('muestrario')
+            );
+
+            // Si el producto tiene fotos que no son muestrarios, elegimos una al azar
+            const fotoSeleccionada = fotosFiltradas.length > 0 
+                ? fotosFiltradas[Math.floor(Math.random() * fotosFiltradas.length)]
+                : prod.fotos[0]; // Backup por si solo tiene muestrarios
+
             return `<div class="carousel-item" onclick="irAProducto('${prod.id}')">
-                        <img src="${rutaBase}${prod.carpeta}/${fotoAleatoria}" alt="${prod.nombre}">
+                        <img src="${rutaBase}${prod.carpeta}/${fotoSeleccionada}" alt="${prod.nombre}">
                     </div>`;
         }).join('');
 
