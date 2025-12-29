@@ -271,7 +271,7 @@
                 fotosDisponibles.push({ id: prod.id, src: `${rutaBase}${prod.carpeta}/${randomF}`, nombre: prod.nombre });
             }
         });
-        const seleccionFinal = fotosDisponibles.sort(() => 0.5 - Math.random()).slice(0, 9);
+        const seleccionFinal = fotosDisponibles.sort(() => 0.5 - Math.random()).slice(0, 12);
         carouselTrack.innerHTML = seleccionFinal.map(item => `
             <div class="carousel-item" onclick="irAProducto('${item.id}')">
                 <img src="${item.src}" alt="${item.nombre}" style="width:100%; height:100%; object-fit:cover;">
